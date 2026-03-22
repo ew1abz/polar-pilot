@@ -225,14 +225,18 @@ async fn main(spawner: Spawner) -> ! {
     // ───────────────────────────────────────────────────────────────
     // CONCEPT: embassy-net Stack
     // ───────────────────────────────────────────────────────────────
-    // The Stack wraps a network Device and provides TCP/UDP/DHCP.
+    // The Stack wraps a network Device and provides TCP/UDP.
     // It also returns a runner that must be spawned.
     //
-    // Config::dhcpv4(Default::default()) enables DHCP.
+    // Static IP configuration — no DHCP.
     // StackResources<3> allows up to 3 simultaneous sockets.
     //
     // The random seed is needed for TCP sequence numbers.
-    let net_config = embassy_net::Config::dhcpv4(Default::default());
+    let net_config = embassy_net::Config::ipv4_static(embassy_net::StaticConfigV4 {
+        address: embassy_net::Ipv4Cidr::new(embassy_net::Ipv4Address::new(10, 0, 0, 100), 24),
+        gateway: Some(embassy_net::Ipv4Address::new(10, 0, 0, 1)),
+        dns_servers: heapless::Vec::new(),
+    });
 
     // Generate a random seed from the hardware RNG
     let mut rng = Rng::new(p.RNG, Irqs);
@@ -243,14 +247,10 @@ async fn main(spawner: Spawner) -> ! {
     let resources = NET_RESOURCES.init(StackResources::new());
     let (stack, runner) = embassy_net::new(device, net_config, resources, seed);
 
-    // Spawn the network stack task (handles DHCP, ARP, etc.)
+    // Spawn the network stack task (handles ARP, timers, etc.)
     spawner.spawn(net_task(runner).unwrap());
 
-    // ───────────────────────────────────────────────────────────────
-    // Wait for DHCP to assign us an IP address
-    // ───────────────────────────────────────────────────────────────
-    info!("Waiting for DHCP...");
-    stack.wait_config_up().await;
+    // Static IP — no DHCP wait needed
     info!("Network up! Config: {:?}", stack.config_v4());
 
     // ───────────────────────────────────────────────────────────────

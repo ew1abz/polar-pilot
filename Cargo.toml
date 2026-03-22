@@ -39,11 +39,11 @@ embassy-time = { version = "0.5", features = [
 
 # ── Networking ───────────────────────────────────────────────────
 # embassy-net is a sans-std TCP/IP stack (wraps smoltcp internally).
-# We enable TCP + DHCPv4.
+# Minimal: TCP only, no DHCP, no ICMP — uses static IP.
 embassy-net = { version = "0.9", features = [
     "defmt",
     "tcp",
-    "dhcpv4",
+    "proto-ipv4",
     "medium-ethernet",
 ] }
 
@@ -70,6 +70,9 @@ panic-probe = { version = "1", features = ["print-defmt"] }
 # Embassy tasks need 'static data.  StaticCell lets you safely
 # initialize a static variable exactly once at runtime.
 static_cell = "2"
+
+# ── Heapless Vec (used by embassy-net StaticConfigV4) ──────────────
+heapless = "0.9"
 
 # ── Cortex-M runtime (vector table, reset handler) ──────────────
 cortex-m = { version = "0.7", features = ["critical-section-single-core"] }

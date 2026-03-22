@@ -1,0 +1,1411 @@
+warning: associated constant `COMMON_MODE` is never used
+  --> embassy-net-wiznet-patch/src/chip/mod.rs:23:11
+   |
+15 | pub(crate) trait SealedChip {
+   |                  ---------- associated constant in this trait
+...
+23 |     const COMMON_MODE: Self::Address;
+   |           ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `embassy-net-wiznet` (lib) generated 1 warning
+   Compiling w5500-rotator v0.1.0 (/home/vlad/Projects/rust-l432-w5500)
+    Finished `release` profile [optimized + debuginfo] target(s) in 3.78s
+     Running `probe-rs run --chip STM32L432KCUx target/thumbv7em-none-eabihf/release/w5500-rotator`
+    Finished in 10.72s
+[33m WARN[0m [2mdefmt_decoder::log::format[0m[2m:[0m logger format contains timestamp but no timestamp implementation was provided; consider removing the timestamp (`{t}` or `{T}`) from the logger format or provide a `defmt::timestamp!` implementation    
+0.000000 DEBUG rcc: Clocks { hclk1: MaybeHertz(80000000), hclk2: MaybeHertz(80000000), hclk3: MaybeHertz(80000000), hse: MaybeHertz(0), hsi: MaybeHertz(16000000), hsi48: MaybeHertz(48000000), lse: MaybeHertz(0), lsi: MaybeHertz(32000), msi: MaybeHertz(4000000), pclk1: MaybeHertz(80000000), pclk1_tim: MaybeHertz(80000000), pclk2: MaybeHertz(80000000), pclk2_tim: MaybeHertz(80000000), pll1_p: MaybeHertz(0), pll1_q: MaybeHertz(0), pllsai1_p: MaybeHertz(0), pllsai1_q: MaybeHertz(0), pllsai2_p: MaybeHertz(0), rtc: MaybeHertz(32000), sai1_extclk: MaybeHertz(0), sys: MaybeHertz(80000000) }
+└─ embassy_stm32::rcc::set_freqs @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-stm32-0.6.0/src/rcc/mod.rs:88  
+0.000000 INFO  W5500 Rotator Controller starting...
+└─ w5500_rotator::____embassy_main_task::____embassy_main_task_inner_function::{async_fn#0} @ src/main.rs:101 
+0.101867 INFO  IPv4: DOWN
+└─ embassy_net::{impl#4}::apply_static_config @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-net-0.9.0/src/lib.rs:787 
+0.101928 INFO  Waiting for DHCP...
+└─ w5500_rotator::____embassy_main_task::____embassy_main_task_inner_function::{async_fn#0} @ src/main.rs:298 
+0.101959 DEBUG DHCP send DISCOVER to 255.255.255.255: Repr { message_type: Discover, transaction_id: 3858211574, secs: 0, client_hardware_address: 02-00-00-00-00-01, client_ip: 0.0.0.0, your_ip: 0.0.0.0, server_ip: 0.0.0.0, router: None, subnet_mask: None, relay_agent_ip: 0.0.0.0, broadcast: false, requested_ip: None, client_identifier: Some(02-00-00-00-00-01), server_identifier: None, parameter_request_list: Some([1, 3, 6]), dns_servers: None, max_size: Some(1432), lease_duration: None, renew_duration: None, rebind_duration: None, additional_options: [] }
+└─ smoltcp::socket::dhcpv4::{impl#1}::dispatch @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/smoltcp-0.13.0/src/macros.rs:18  
+0.602508 DEBUG w5500: PHYCFGR=0b10111010 (0xba)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+0.602539 DEBUG w5500: link poll = false
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+1.102508 DEBUG w5500: PHYCFGR=0b10111010 (0xba)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+1.102539 DEBUG w5500: link poll = false
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+1.602508 DEBUG w5500: PHYCFGR=0b10111010 (0xba)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+1.602539 DEBUG w5500: link poll = false
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+1.734985 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+1.735198 DEBUG w5500 rx: rx_size=122
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+1.735473 DEBUG w5500 rx: frame_hdr_raw=122 read_ptr=0x0002
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+1.737274 INFO  w5500: rx frame 120 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+1.764129 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+1.764343 DEBUG w5500 rx: rx_size=190
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+1.764648 DEBUG w5500 rx: frame_hdr_raw=190 read_ptr=0x007c
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+1.767303 INFO  w5500: rx frame 188 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+1.777282 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+1.777496 DEBUG w5500 rx: rx_size=174
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+1.777770 DEBUG w5500 rx: frame_hdr_raw=174 read_ptr=0x013a
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+1.780242 INFO  w5500: rx frame 172 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+1.790527 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+1.790740 DEBUG w5500 rx: rx_size=186
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+1.791046 DEBUG w5500 rx: frame_hdr_raw=186 read_ptr=0x01e8
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+1.793640 INFO  w5500: rx frame 184 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+2.068206 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+2.068603 DEBUG w5500 rx: rx_size=318
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+2.068878 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x02a2
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+2.069915 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+2.069946 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+2.070190 DEBUG w5500 rx: rx_size=256
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+2.070465 DEBUG w5500 rx: frame_hdr_raw=80 read_ptr=0x02e0
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+2.071716 INFO  w5500: rx frame 78 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+2.071746 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+2.071990 DEBUG w5500 rx: rx_size=176
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+2.072265 DEBUG w5500 rx: frame_hdr_raw=64 read_ptr=0x0330
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+2.073333 INFO  w5500: rx frame 62 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+2.073364 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+2.073577 DEBUG w5500 rx: rx_size=112
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+2.073883 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x0370
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+2.075531 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+2.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+2.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+2.102600 INFO  link_up = true
+└─ embassy_net::{impl#4}::poll @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-net-0.9.0/src/lib.rs:886 
+2.102630 INFO  IPv4: DOWN
+└─ embassy_net::{impl#4}::apply_static_config @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-net-0.9.0/src/lib.rs:787 
+2.102661 DEBUG DHCP send DISCOVER to 255.255.255.255: Repr { message_type: Discover, transaction_id: 2500035923, secs: 0, client_hardware_address: 02-00-00-00-00-01, client_ip: 0.0.0.0, your_ip: 0.0.0.0, server_ip: 0.0.0.0, router: None, subnet_mask: None, relay_agent_ip: 0.0.0.0, broadcast: false, requested_ip: None, client_identifier: Some(02-00-00-00-00-01), server_identifier: None, parameter_request_list: Some([1, 3, 6]), dns_servers: None, max_size: Some(1432), lease_duration: None, renew_duration: None, rebind_duration: None, additional_options: [] }
+└─ smoltcp::socket::dhcpv4::{impl#1}::dispatch @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/smoltcp-0.13.0/src/macros.rs:18  
+2.121002 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+2.121215 DEBUG w5500 rx: rx_size=62
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+2.121490 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x03e0
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+2.122528 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+2.566772 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+2.566986 DEBUG w5500 rx: rx_size=112
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+2.567291 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x041e
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+2.568939 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+2.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+2.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+2.736572 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+2.736785 DEBUG w5500 rx: rx_size=122
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+2.737091 DEBUG w5500 rx: frame_hdr_raw=122 read_ptr=0x048e
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+2.738861 INFO  w5500: rx frame 120 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.062835 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.063232 DEBUG w5500 rx: rx_size=212
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.063507 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x0508
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.064544 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.064575 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.064819 DEBUG w5500 rx: rx_size=150
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.065093 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x0546
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.066131 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.066162 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.066375 DEBUG w5500 rx: rx_size=88
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.066680 DEBUG w5500 rx: frame_hdr_raw=88 read_ptr=0x0584
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.068023 INFO  w5500: rx frame 86 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.080810 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.081207 DEBUG w5500 rx: rx_size=236
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.081512 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x05dc
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.083160 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.083190 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.083435 DEBUG w5500 rx: rx_size=290
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.083709 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x064c
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.084747 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.084777 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.085021 DEBUG w5500 rx: rx_size=228
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.085296 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x068a
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.086334 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.086364 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.086608 DEBUG w5500 rx: rx_size=320
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.086883 DEBUG w5500 rx: frame_hdr_raw=93 read_ptr=0x06c8
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.088317 INFO  w5500: rx frame 91 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.088348 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.088592 DEBUG w5500 rx: rx_size=227
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.088867 DEBUG w5500 rx: frame_hdr_raw=73 read_ptr=0x0725
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.090026 INFO  w5500: rx frame 71 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.090057 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.090301 DEBUG w5500 rx: rx_size=154
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.090606 DEBUG w5500 rx: frame_hdr_raw=92 read_ptr=0x076e
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.092010 INFO  w5500: rx frame 90 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.092041 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.092254 DEBUG w5500 rx: rx_size=62
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.092559 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x07ca
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.093566 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+3.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+3.156066 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.156280 DEBUG w5500 rx: rx_size=181
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.156585 DEBUG w5500 rx: frame_hdr_raw=181 read_ptr=0x0808
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.159118 INFO  w5500: rx frame 179 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.500030 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.500244 DEBUG w5500 rx: rx_size=166
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.500549 DEBUG w5500 rx: frame_hdr_raw=93 read_ptr=0x08bd
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.501953 INFO  w5500: rx frame 91 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.501983 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.502227 DEBUG w5500 rx: rx_size=73
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.502502 DEBUG w5500 rx: frame_hdr_raw=73 read_ptr=0x091a
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.503662 INFO  w5500: rx frame 71 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.562225 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.562438 DEBUG w5500 rx: rx_size=204
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.562744 DEBUG w5500 rx: frame_hdr_raw=72 read_ptr=0x0963
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.563873 INFO  w5500: rx frame 70 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.563934 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+3.564147 DEBUG w5500 rx: rx_size=132
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+3.564453 DEBUG w5500 rx: frame_hdr_raw=132 read_ptr=0x09ab
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+3.566375 INFO  w5500: rx frame 130 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+3.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+3.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+4.060058 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+4.060272 DEBUG w5500 rx: rx_size=124
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+4.060577 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x0a2f
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+4.061584 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+4.061645 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+4.061859 DEBUG w5500 rx: rx_size=62
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+4.062164 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x0a6d
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+4.063171 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+4.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+4.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+4.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+4.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+4.744659 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+4.744873 DEBUG w5500 rx: rx_size=122
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+4.745178 DEBUG w5500 rx: frame_hdr_raw=122 read_ptr=0x0aab
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+4.746948 INFO  w5500: rx frame 120 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.041992 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.042205 DEBUG w5500 rx: rx_size=198
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.042480 DEBUG w5500 rx: frame_hdr_raw=198 read_ptr=0x0b25
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.045257 INFO  w5500: rx frame 196 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.045288 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.045532 DEBUG w5500 rx: rx_size=371
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.045806 DEBUG w5500 rx: frame_hdr_raw=168 read_ptr=0x0beb
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.048187 INFO  w5500: rx frame 166 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.048248 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.048461 DEBUG w5500 rx: rx_size=203
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.048767 DEBUG w5500 rx: frame_hdr_raw=203 read_ptr=0x0c93
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.051574 INFO  w5500: rx frame 201 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.056549 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.056762 DEBUG w5500 rx: rx_size=62
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.057037 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x0d5e
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.058074 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.062835 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.063049 DEBUG w5500 rx: rx_size=154
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.063323 DEBUG w5500 rx: frame_hdr_raw=92 read_ptr=0x0d9c
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.064727 INFO  w5500: rx frame 90 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.064758 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.065002 DEBUG w5500 rx: rx_size=216
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.065277 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x0df8
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.066314 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.066345 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.066589 DEBUG w5500 rx: rx_size=154
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.066864 DEBUG w5500 rx: frame_hdr_raw=92 read_ptr=0x0e36
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.068267 INFO  w5500: rx frame 90 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.068328 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.068542 DEBUG w5500 rx: rx_size=62
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.068847 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x0e92
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.069854 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.081115 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.081512 DEBUG w5500 rx: rx_size=308
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.081817 DEBUG w5500 rx: frame_hdr_raw=92 read_ptr=0x0ed0
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.083221 INFO  w5500: rx frame 90 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.083251 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.083465 DEBUG w5500 rx: rx_size=216
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.083770 DEBUG w5500 rx: frame_hdr_raw=92 read_ptr=0x0f2c
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.085174 INFO  w5500: rx frame 90 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.085205 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.085449 DEBUG w5500 rx: rx_size=124
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.085723 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x0f88
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.086761 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.086791 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.087036 DEBUG w5500 rx: rx_size=62
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.087310 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x0fc6
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.088348 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.088378 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.088623 DEBUG w5500 rx: rx_size=166
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.088897 DEBUG w5500 rx: frame_hdr_raw=93 read_ptr=0x1004
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.090301 INFO  w5500: rx frame 91 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.090362 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.090576 DEBUG w5500 rx: rx_size=73
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.090881 DEBUG w5500 rx: frame_hdr_raw=73 read_ptr=0x1061
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.092041 INFO  w5500: rx frame 71 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+5.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+5.155548 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.155761 DEBUG w5500 rx: rx_size=112
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.156066 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x10aa
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.157714 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.157775 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.157989 DEBUG w5500 rx: rx_size=224
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.158294 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x111a
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.159942 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.160003 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.160217 DEBUG w5500 rx: rx_size=112
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.160522 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x118a
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.162170 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.288543 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.288757 DEBUG w5500 rx: rx_size=328
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.289062 DEBUG w5500 rx: frame_hdr_raw=328 read_ptr=0x11fa
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.293487 INFO  w5500: rx frame 326 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.293579 DEBUG DHCP recv Offer from 10.0.0.5: Repr { message_type: Offer, transaction_id: 2500035923, secs: 0, client_hardware_address: 02-00-00-00-00-01, client_ip: 0.0.0.0, your_ip: 10.0.0.200, server_ip: 10.0.0.5, router: None, subnet_mask: Some(255.255.255.0), relay_agent_ip: 0.0.0.0, broadcast: false, requested_ip: None, client_identifier: None, server_identifier: Some(10.0.0.5), parameter_request_list: None, dns_servers: None, max_size: None, lease_duration: Some(172800), renew_duration: Some(86400), rebind_duration: Some(138240), additional_options: [] }
+└─ smoltcp::socket::dhcpv4::{impl#1}::process @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/smoltcp-0.13.0/src/macros.rs:18  
+5.294006 DEBUG DHCP send request to 255.255.255.255: Repr { message_type: Request, transaction_id: 2500035923, secs: 0, client_hardware_address: 02-00-00-00-00-01, client_ip: 0.0.0.0, your_ip: 0.0.0.0, server_ip: 0.0.0.0, router: None, subnet_mask: None, relay_agent_ip: 0.0.0.0, broadcast: false, requested_ip: Some(10.0.0.200), client_identifier: Some(02-00-00-00-00-01), server_identifier: Some(10.0.0.5), parameter_request_list: Some([1, 3, 6]), dns_servers: None, max_size: Some(1432), lease_duration: None, renew_duration: None, rebind_duration: None, additional_options: [] }
+└─ smoltcp::socket::dhcpv4::{impl#1}::dispatch @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/smoltcp-0.13.0/src/macros.rs:18  
+5.320739 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.320953 DEBUG w5500 rx: rx_size=328
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.321258 DEBUG w5500 rx: frame_hdr_raw=328 read_ptr=0x1342
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.325683 INFO  w5500: rx frame 326 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.325775 DEBUG DHCP recv Ack from 10.0.0.5: Repr { message_type: Ack, transaction_id: 2500035923, secs: 0, client_hardware_address: 02-00-00-00-00-01, client_ip: 0.0.0.0, your_ip: 10.0.0.200, server_ip: 10.0.0.5, router: None, subnet_mask: Some(255.255.255.0), relay_agent_ip: 0.0.0.0, broadcast: false, requested_ip: None, client_identifier: None, server_identifier: Some(10.0.0.5), parameter_request_list: None, dns_servers: None, max_size: None, lease_duration: Some(172800), renew_duration: Some(86400), rebind_duration: Some(138240), additional_options: [] }
+└─ smoltcp::socket::dhcpv4::{impl#1}::process @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/smoltcp-0.13.0/src/macros.rs:18  
+5.326232 DEBUG IPv4: UP
+└─ embassy_net::{impl#4}::apply_static_config @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-net-0.9.0/src/lib.rs:775 
+5.326263 DEBUG    IP address:      10.0.0.200/24
+└─ embassy_net::{impl#4}::apply_static_config @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-net-0.9.0/src/lib.rs:776 
+5.326324 DEBUG    Default gateway: None
+└─ embassy_net::{impl#4}::apply_static_config @ /home/vlad/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-net-0.9.0/src/lib.rs:777 
+5.326385 INFO  Network up! Config: Some(StaticConfigV4 { address: 10.0.0.200/24, gateway: None, dns_servers: [] })
+└─ w5500_rotator::____embassy_main_task::____embassy_main_task_inner_function::{async_fn#0} @ src/main.rs:300 
+5.326507 INFO  Listening on port 4533...
+└─ w5500_rotator::____embassy_main_task::____embassy_main_task_inner_function::{async_fn#0} @ src/main.rs:318 
+5.504486 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.504699 DEBUG w5500 rx: rx_size=166
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.504974 DEBUG w5500 rx: frame_hdr_raw=93 read_ptr=0x148a
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.506408 INFO  w5500: rx frame 91 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.506439 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.506652 DEBUG w5500 rx: rx_size=73
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.506958 DEBUG w5500 rx: frame_hdr_raw=73 read_ptr=0x14e7
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.508117 INFO  w5500: rx frame 71 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.566864 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.567077 DEBUG w5500 rx: rx_size=176
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.567352 DEBUG w5500 rx: frame_hdr_raw=64 read_ptr=0x1530
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.568389 INFO  w5500: rx frame 62 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.568450 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.568664 DEBUG w5500 rx: rx_size=112
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.568969 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x1570
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.570617 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+5.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+5.914825 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.915222 DEBUG w5500 rx: rx_size=336
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.915527 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x15e0
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.917175 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.917205 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.917449 DEBUG w5500 rx: rx_size=224
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.917755 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x1650
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.919403 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+5.919464 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+5.919677 DEBUG w5500 rx: rx_size=112
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+5.919982 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x16c0
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+5.921630 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.069671 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.069885 DEBUG w5500 rx: rx_size=72
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.070159 DEBUG w5500 rx: frame_hdr_raw=72 read_ptr=0x1730
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.071319 INFO  w5500: rx frame 70 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+6.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+6.163513 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.163726 DEBUG w5500 rx: rx_size=181
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.164001 DEBUG w5500 rx: frame_hdr_raw=181 read_ptr=0x1778
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.166564 INFO  w5500: rx frame 179 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+6.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+6.666839 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.667236 DEBUG w5500 rx: rx_size=336
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.667541 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x182d
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.669189 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.669219 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.669464 DEBUG w5500 rx: rx_size=224
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.669769 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x189d
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.671417 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.671478 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.671691 DEBUG w5500 rx: rx_size=112
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.671997 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x190d
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.673645 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.742675 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.742889 DEBUG w5500 rx: rx_size=181
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.743164 DEBUG w5500 rx: frame_hdr_raw=181 read_ptr=0x197d
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.745697 INFO  w5500: rx frame 179 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.774322 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.774536 DEBUG w5500 rx: rx_size=185
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.774810 DEBUG w5500 rx: frame_hdr_raw=185 read_ptr=0x1a32
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.777404 INFO  w5500: rx frame 183 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.777465 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.777679 DEBUG w5500 rx: rx_size=171
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.777984 DEBUG w5500 rx: frame_hdr_raw=171 read_ptr=0x1aeb
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.780395 INFO  w5500: rx frame 169 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.804168 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.804382 DEBUG w5500 rx: rx_size=183
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.804656 DEBUG w5500 rx: frame_hdr_raw=183 read_ptr=0x1b96
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.807220 INFO  w5500: rx frame 181 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.807281 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.807495 DEBUG w5500 rx: rx_size=169
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.807769 DEBUG w5500 rx: frame_hdr_raw=169 read_ptr=0x1c4d
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.810180 INFO  w5500: rx frame 167 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.835205 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.835418 DEBUG w5500 rx: rx_size=183
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.835693 DEBUG w5500 rx: frame_hdr_raw=183 read_ptr=0x1cf6
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.838256 INFO  w5500: rx frame 181 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.838317 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.838531 DEBUG w5500 rx: rx_size=169
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.838836 DEBUG w5500 rx: frame_hdr_raw=169 read_ptr=0x1dad
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.841217 INFO  w5500: rx frame 167 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.866668 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.866882 DEBUG w5500 rx: rx_size=183
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.867187 DEBUG w5500 rx: frame_hdr_raw=183 read_ptr=0x1e56
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.869750 INFO  w5500: rx frame 181 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.869781 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.870025 DEBUG w5500 rx: rx_size=169
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.870300 DEBUG w5500 rx: frame_hdr_raw=169 read_ptr=0x1f0d
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.872711 INFO  w5500: rx frame 167 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.897644 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.897857 DEBUG w5500 rx: rx_size=185
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.898132 DEBUG w5500 rx: frame_hdr_raw=185 read_ptr=0x1fb6
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.900726 INFO  w5500: rx frame 183 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.900787 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.901000 DEBUG w5500 rx: rx_size=171
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.901306 DEBUG w5500 rx: frame_hdr_raw=171 read_ptr=0x206f
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.903717 INFO  w5500: rx frame 169 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.928680 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.928894 DEBUG w5500 rx: rx_size=183
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.929199 DEBUG w5500 rx: frame_hdr_raw=183 read_ptr=0x211a
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.931762 INFO  w5500: rx frame 181 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.931793 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.932037 DEBUG w5500 rx: rx_size=169
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.932312 DEBUG w5500 rx: frame_hdr_raw=169 read_ptr=0x21d1
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.934692 INFO  w5500: rx frame 167 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.959167 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.959381 DEBUG w5500 rx: rx_size=185
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.959655 DEBUG w5500 rx: frame_hdr_raw=185 read_ptr=0x227a
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.962249 INFO  w5500: rx frame 183 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.962310 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.962524 DEBUG w5500 rx: rx_size=171
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.962829 DEBUG w5500 rx: frame_hdr_raw=171 read_ptr=0x2333
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.965240 INFO  w5500: rx frame 169 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+6.989715 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+6.989929 DEBUG w5500 rx: rx_size=181
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+6.990203 DEBUG w5500 rx: frame_hdr_raw=181 read_ptr=0x23de
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+6.992767 INFO  w5500: rx frame 179 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+7.067718 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+7.067932 DEBUG w5500 rx: rx_size=62
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+7.068237 DEBUG w5500 rx: frame_hdr_raw=62 read_ptr=0x2493
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+7.069244 INFO  w5500: rx frame 60 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+7.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+7.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+7.425628 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+7.426025 DEBUG w5500 rx: rx_size=336
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+7.426330 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x24d1
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+7.427978 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+7.428009 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+7.428253 DEBUG w5500 rx: rx_size=224
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+7.428558 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x2541
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+7.430206 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+7.430267 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+7.430480 DEBUG w5500 rx: rx_size=112
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+7.430786 DEBUG w5500 rx: frame_hdr_raw=112 read_ptr=0x25b1
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+7.432434 INFO  w5500: rx frame 110 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+7.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+7.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+8.049346 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+8.049560 DEBUG w5500 rx: rx_size=250
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+8.049835 DEBUG w5500 rx: frame_hdr_raw=250 read_ptr=0x2621
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+8.053283 INFO  w5500: rx frame 248 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+8.053314 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+8.053558 DEBUG w5500 rx: rx_size=1004
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+8.053833 DEBUG w5500 rx: frame_hdr_raw=254 read_ptr=0x271b
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+8.057312 INFO  w5500: rx frame 252 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+8.057373 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+8.057617 DEBUG w5500 rx: rx_size=750
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+8.057891 DEBUG w5500 rx: frame_hdr_raw=197 read_ptr=0x2819
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+8.060638 INFO  w5500: rx frame 195 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+8.060668 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+8.060913 DEBUG w5500 rx: rx_size=553
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+8.061218 DEBUG w5500 rx: frame_hdr_raw=167 read_ptr=0x28de
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+8.063568 INFO  w5500: rx frame 165 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+8.063629 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+8.063873 DEBUG w5500 rx: rx_size=386
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+8.064147 DEBUG w5500 rx: frame_hdr_raw=173 read_ptr=0x2985
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+8.066589 INFO  w5500: rx frame 171 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+8.066619 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+8.066864 DEBUG w5500 rx: rx_size=213
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+8.067169 DEBUG w5500 rx: frame_hdr_raw=213 read_ptr=0x2a32
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+8.070129 INFO  w5500: rx frame 211 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+8.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+8.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+8.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+8.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+8.746154 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+8.746368 DEBUG w5500 rx: rx_size=122
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+8.746643 DEBUG w5500 rx: frame_hdr_raw=122 read_ptr=0x2b07
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+8.748443 INFO  w5500: rx frame 120 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+9.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+9.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+9.173217 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+9.173431 DEBUG w5500 rx: rx_size=181
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+9.173736 DEBUG w5500 rx: frame_hdr_raw=181 read_ptr=0x2b81
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+9.176269 INFO  w5500: rx frame 179 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+9.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+9.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+9.995574 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+9.995788 DEBUG w5500 rx: rx_size=181
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+9.996063 DEBUG w5500 rx: frame_hdr_raw=181 read_ptr=0x2c36
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+9.998626 INFO  w5500: rx frame 179 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.025848 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.026062 DEBUG w5500 rx: rx_size=185
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.026336 DEBUG w5500 rx: frame_hdr_raw=185 read_ptr=0x2ceb
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.028930 INFO  w5500: rx frame 183 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.028991 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.029205 DEBUG w5500 rx: rx_size=171
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.029510 DEBUG w5500 rx: frame_hdr_raw=171 read_ptr=0x2da4
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.031921 INFO  w5500: rx frame 169 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.057403 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.057617 DEBUG w5500 rx: rx_size=255
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.057891 DEBUG w5500 rx: frame_hdr_raw=72 read_ptr=0x2e4f
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.059051 INFO  w5500: rx frame 70 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.059082 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.059295 DEBUG w5500 rx: rx_size=352
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.059600 DEBUG w5500 rx: frame_hdr_raw=183 read_ptr=0x2e97
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.062164 INFO  w5500: rx frame 181 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.062225 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.062438 DEBUG w5500 rx: rx_size=169
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.062713 DEBUG w5500 rx: frame_hdr_raw=169 read_ptr=0x2f4e
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.065124 INFO  w5500: rx frame 167 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.087951 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.088165 DEBUG w5500 rx: rx_size=183
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.088439 DEBUG w5500 rx: frame_hdr_raw=183 read_ptr=0x2ff7
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.091033 INFO  w5500: rx frame 181 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.091064 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.091278 DEBUG w5500 rx: rx_size=169
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.091583 DEBUG w5500 rx: frame_hdr_raw=169 read_ptr=0x30ae
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.093963 INFO  w5500: rx frame 167 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+10.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+10.118743 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.118957 DEBUG w5500 rx: rx_size=183
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.119262 DEBUG w5500 rx: frame_hdr_raw=183 read_ptr=0x3157
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.121826 INFO  w5500: rx frame 181 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.121856 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.122100 DEBUG w5500 rx: rx_size=169
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.122375 DEBUG w5500 rx: frame_hdr_raw=169 read_ptr=0x320e
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.124786 INFO  w5500: rx frame 167 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.151519 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.151733 DEBUG w5500 rx: rx_size=185
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.152008 DEBUG w5500 rx: frame_hdr_raw=185 read_ptr=0x32b7
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.154602 INFO  w5500: rx frame 183 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.154663 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.154876 DEBUG w5500 rx: rx_size=171
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.155181 DEBUG w5500 rx: frame_hdr_raw=171 read_ptr=0x3370
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.157592 INFO  w5500: rx frame 169 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.180603 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.180816 DEBUG w5500 rx: rx_size=183
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.181121 DEBUG w5500 rx: frame_hdr_raw=183 read_ptr=0x341b
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.183685 INFO  w5500: rx frame 181 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.183715 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.183959 DEBUG w5500 rx: rx_size=169
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.184234 DEBUG w5500 rx: frame_hdr_raw=169 read_ptr=0x34d2
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.186614 INFO  w5500: rx frame 167 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.212036 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.212249 DEBUG w5500 rx: rx_size=185
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.212524 DEBUG w5500 rx: frame_hdr_raw=185 read_ptr=0x357b
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.215118 INFO  w5500: rx frame 183 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.215148 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.215393 DEBUG w5500 rx: rx_size=171
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.215667 DEBUG w5500 rx: frame_hdr_raw=171 read_ptr=0x3634
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.218109 INFO  w5500: rx frame 169 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.242614 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+10.242828 DEBUG w5500 rx: rx_size=181
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+10.243103 DEBUG w5500 rx: frame_hdr_raw=181 read_ptr=0x36df
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+10.245666 INFO  w5500: rx frame 179 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+10.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+10.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+11.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+11.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+11.317962 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+11.318176 DEBUG w5500 rx: rx_size=245
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+11.318481 DEBUG w5500 rx: frame_hdr_raw=245 read_ptr=0x3794
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+11.321838 INFO  w5500: rx frame 243 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+11.321868 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+11.322113 DEBUG w5500 rx: rx_size=358
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+11.322418 DEBUG w5500 rx: frame_hdr_raw=192 read_ptr=0x3889
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+11.325103 INFO  w5500: rx frame 190 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+11.325134 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+11.325378 DEBUG w5500 rx: rx_size=166
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+11.325653 DEBUG w5500 rx: frame_hdr_raw=166 read_ptr=0x3949
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+11.328002 INFO  w5500: rx frame 164 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+11.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+11.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+12.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+12.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+12.187957 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+12.188171 DEBUG w5500 rx: rx_size=181
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+12.188476 DEBUG w5500 rx: frame_hdr_raw=181 read_ptr=0x39ef
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+12.191009 INFO  w5500: rx frame 179 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+12.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+12.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+13.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+13.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+13.104339 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+13.104553 DEBUG w5500 rx: rx_size=720
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+13.104827 DEBUG w5500 rx: frame_hdr_raw=720 read_ptr=0x3aa4
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+13.114288 INFO  w5500: rx frame 718 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+13.114318 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+13.114562 DEBUG w5500 rx: rx_size=700
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+13.124053 INFO  w5500: rx frame 698 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+13.245147 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+13.245361 DEBUG w5500 rx: rx_size=720
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+13.245635 DEBUG w5500 rx: frame_hdr_raw=720 read_ptr=0x4030
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+13.255096 INFO  w5500: rx frame 718 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+13.369506 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+13.369720 DEBUG w5500 rx: rx_size=700
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+13.370025 DEBUG w5500 rx: frame_hdr_raw=700 read_ptr=0x4300
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+13.379211 INFO  w5500: rx frame 698 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+13.523986 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+13.524200 DEBUG w5500 rx: rx_size=720
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+13.524475 DEBUG w5500 rx: frame_hdr_raw=720 read_ptr=0x45bc
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+13.533935 INFO  w5500: rx frame 718 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+13.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+13.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+13.883331 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+13.883544 DEBUG w5500 rx: rx_size=700
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+13.883850 DEBUG w5500 rx: frame_hdr_raw=700 read_ptr=0x488c
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+13.893035 INFO  w5500: rx frame 698 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+14.085571 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+14.085784 DEBUG w5500 rx: rx_size=720
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+14.086090 DEBUG w5500 rx: frame_hdr_raw=720 read_ptr=0x4b48
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+14.095520 INFO  w5500: rx frame 718 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+14.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+14.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+14.335296 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+14.335510 DEBUG w5500 rx: rx_size=232
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+14.335784 DEBUG w5500 rx: frame_hdr_raw=232 read_ptr=0x4e18
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+14.338989 INFO  w5500: rx frame 230 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+14.339019 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+14.339263 DEBUG w5500 rx: rx_size=1066
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+14.339569 DEBUG w5500 rx: frame_hdr_raw=222 read_ptr=0x4f00
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+14.342620 INFO  w5500: rx frame 220 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+14.342681 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+14.342926 DEBUG w5500 rx: rx_size=844
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+14.343200 DEBUG w5500 rx: frame_hdr_raw=182 read_ptr=0x4fde
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+14.345764 INFO  w5500: rx frame 180 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+14.345794 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+14.346038 DEBUG w5500 rx: rx_size=662
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+14.346343 DEBUG w5500 rx: frame_hdr_raw=189 read_ptr=0x5094
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+14.348999 INFO  w5500: rx frame 187 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+14.349029 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+14.349273 DEBUG w5500 rx: rx_size=473
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+14.349548 DEBUG w5500 rx: frame_hdr_raw=209 read_ptr=0x5151
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+14.352447 INFO  w5500: rx frame 207 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+14.352508 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+14.352752 DEBUG w5500 rx: rx_size=264
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+14.353027 DEBUG w5500 rx: frame_hdr_raw=264 read_ptr=0x5222
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+14.356628 INFO  w5500: rx frame 262 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+14.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+14.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+14.893493 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+14.893707 DEBUG w5500 rx: rx_size=700
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+14.894012 DEBUG w5500 rx: frame_hdr_raw=700 read_ptr=0x532a
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+14.903198 INFO  w5500: rx frame 698 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+15.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+15.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+15.189727 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+15.189941 DEBUG w5500 rx: rx_size=181
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+15.190246 DEBUG w5500 rx: frame_hdr_raw=181 read_ptr=0x55e6
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+15.192779 INFO  w5500: rx frame 179 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+15.204956 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+15.205169 DEBUG w5500 rx: rx_size=720
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+15.205474 DEBUG w5500 rx: frame_hdr_raw=720 read_ptr=0x569b
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+15.214904 INFO  w5500: rx frame 718 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+15.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+15.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+16.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+16.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+16.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+16.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+16.747344 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+16.747558 DEBUG w5500 rx: rx_size=122
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+16.747863 DEBUG w5500 rx: frame_hdr_raw=122 read_ptr=0x596b
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+16.749664 INFO  w5500: rx frame 120 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+16.887115 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+16.887329 DEBUG w5500 rx: rx_size=700
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+16.887603 DEBUG w5500 rx: frame_hdr_raw=700 read_ptr=0x59e5
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+16.896820 INFO  w5500: rx frame 698 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+17.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+17.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+17.215026 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+17.215240 DEBUG w5500 rx: rx_size=720
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+17.215515 DEBUG w5500 rx: frame_hdr_raw=720 read_ptr=0x5ca1
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+17.224975 INFO  w5500: rx frame 718 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+17.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+17.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+17.609375 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+17.609588 DEBUG w5500 rx: rx_size=240
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+17.609863 DEBUG w5500 rx: frame_hdr_raw=240 read_ptr=0x5f71
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+17.613159 INFO  w5500: rx frame 238 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+17.613220 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+17.613464 DEBUG w5500 rx: rx_size=442
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+17.613739 DEBUG w5500 rx: frame_hdr_raw=181 read_ptr=0x6061
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+17.616302 INFO  w5500: rx frame 179 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+17.616333 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+17.616577 DEBUG w5500 rx: rx_size=261
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+17.616882 DEBUG w5500 rx: frame_hdr_raw=261 read_ptr=0x6116
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+17.620452 INFO  w5500: rx frame 259 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+18.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+18.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+18.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+18.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+18.901641 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+18.901885 DEBUG w5500 rx: rx_size=700
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+18.902160 DEBUG w5500 rx: frame_hdr_raw=700 read_ptr=0x621b
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+18.911346 INFO  w5500: rx frame 698 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+19.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+19.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+19.229400 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+19.229614 DEBUG w5500 rx: rx_size=720
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+19.229888 DEBUG w5500 rx: frame_hdr_raw=720 read_ptr=0x64d7
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+19.239349 INFO  w5500: rx frame 718 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+19.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+19.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+20.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+20.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+20.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+20.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+20.622406 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+20.622619 DEBUG w5500 rx: rx_size=169
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+20.622924 DEBUG w5500 rx: frame_hdr_raw=169 read_ptr=0x67a7
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+20.625305 INFO  w5500: rx frame 167 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+20.625335 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+20.625610 DEBUG w5500 rx: rx_size=232
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+20.625885 DEBUG w5500 rx: frame_hdr_raw=232 read_ptr=0x6850
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+20.629089 INFO  w5500: rx frame 230 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+20.917663 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+20.917877 DEBUG w5500 rx: rx_size=700
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+20.918182 DEBUG w5500 rx: frame_hdr_raw=700 read_ptr=0x6938
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+20.927368 INFO  w5500: rx frame 698 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+21.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+21.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+21.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+21.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+22.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+22.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+22.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+22.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+23.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+23.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+23.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+23.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+24.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+24.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+24.461181 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+24.461395 DEBUG w5500 rx: rx_size=504
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+24.461669 DEBUG w5500 rx: frame_hdr_raw=504 read_ptr=0x6bf4
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+24.468353 INFO  w5500: rx frame 502 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
+24.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+24.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+25.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+25.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+25.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+25.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+26.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+26.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+26.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+26.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+27.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+27.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+27.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+27.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+28.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+28.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+28.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+28.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+29.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+29.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+29.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+29.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+30.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+30.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+30.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+30.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+31.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+31.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+31.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+31.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+32.102508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+32.102539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+32.602508 DEBUG w5500: PHYCFGR=0b10111111 (0xbf)
+└─ embassy_net_wiznet::device::{impl#3}::is_link_up::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:277 
+32.602539 DEBUG w5500: link poll = true
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:101 
+32.757904 DEBUG w5500: INT fired, reading frame...
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:79  
+32.758117 DEBUG w5500 rx: rx_size=122
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:207 
+32.758422 DEBUG w5500 rx: frame_hdr_raw=122 read_ptr=0x6dec
+└─ embassy_net_wiznet::device::{impl#3}::read_frame::{async_fn#0} @ embassy-net-wiznet-patch/src/device.rs:219 
+32.760223 INFO  w5500: rx frame 120 bytes
+└─ embassy_net_wiznet::{impl#1}::run::{async_fn#0} @ embassy-net-wiznet-patch/src/lib.rs:83  
