@@ -1,0 +1,8 @@
+[target.thumbv7em-none-eabihf]
+runner = "probe-rs run --chip STM32L432KCUx"
+
+[build]
+target = "thumbv7em-none-eabihf"   # Cortex-M4F with hardware float
+
+[env]
+DEFMT_LOG = "debug"                # show defmt debug messages and above
