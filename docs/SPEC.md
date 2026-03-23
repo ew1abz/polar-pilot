@@ -112,6 +112,20 @@ cargo run --release
 
 (Configured via `.cargo/config.toml` to use `probe-rs run`.)
 
+### Binary Size
+
+Release build (`opt-level = "s"`, LTO):
+
+| Configuration                        | .text (bytes) | Delta               |
+|--------------------------------------|---------------|---------------------|
+| Minimal (TCP + static IP, no defmt)  | 42,312        | baseline            |
+| Minimal (TCP + static IP, defmt)     | 66,384        | +24,072 (+56.9%)    |
+| + DHCP                               | 75,672        | +33,360 (+78.8%)    |
+| + DHCP + ICMP echo reply             | 78,112        | +35,800 (+84.6%)    |
+
+STM32L432KC has 256 KB flash — plenty of headroom. The `minimal` branch
+has the static-IP-only builds (with and without defmt) for reference.
+
 ## Project Structure
 
 ```
@@ -127,6 +141,38 @@ cargo run --release
 ```
 
 Single-file `main.rs` for simplicity — this is a test/example project.
+
+## Known Issues & Workarounds
+
+### SPI CLK Hi-Z Between DMA Operations (embassy-stm32 0.6.0)
+
+The `embassy-stm32` v0.6.0 SPI driver disables the SPI peripheral (`SPE=0`)
+between DMA operations within a single `SpiDevice::transaction()`. On STM32L4,
+this causes the SCK pin to go hi-Z, which corrupts communication with the W5500.
+
+**Symptoms**: PHYCFGR reads incorrect values, `is_link_up()` returns false,
+DHCP never completes, integer underflow panic in `read_frame()`.
+
+**Hardware workaround**: Add a **pull-down resistor on SCK (PA5)** to hold it
+low during hi-Z gaps. This keeps the clock at the correct idle level (CPOL=0)
+and prevents the W5500 from seeing spurious clock edges.
+
+**Software patches** (in `embassy-net-wiznet-patch/`):
+
+- Combined the 3-byte SPI header into a single `Operation::Write` (reduces
+  operation boundaries from 2 to 1).
+- Added bounds check in `read_frame()` to guard against integer underflow
+  when a corrupted frame header reports size < 2.
+- Removed redundant software reset (`MR=0x80`) which clears PHYCFGR bit 7
+  and breaks link detection after the hardware reset already ran.
+
+See `embassy-spi-bug-report` branch for the full upstream bug reports.
+
+### STM32L432 Fixed DMA Channel Mapping
+
+The STM32L432 has no DMAMUX — DMA channels are hardwired per peripheral.
+SPI1 must use DMA1_CH2 (RX) and DMA1_CH3 (TX). Using wrong channels causes
+silent failures.
 
 ## Constraints & Decisions
 
