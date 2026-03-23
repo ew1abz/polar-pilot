@@ -39,7 +39,7 @@ SCK floats hi-Z between operations. Consequences:
 - W5500 register reads return corrupted data
 - `PHYCFGR` reads wrong, `is_link_up()` always returns false
 - embassy-net drops all received frames, DHCP never completes
-- Integer underflow panic in `read_frame()` from corrupted frame size headers
+- Integer underflow panic in `read_frame()` from corrupted frame size headers (see companion bug report)
 
 ## Platform
 
