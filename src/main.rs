@@ -9,7 +9,6 @@
 #![no_std] // No standard library — we're on bare metal
 #![no_main] // No fn main() — Embassy provides the entry point
 
-use defmt::*;
 use embassy_executor::Spawner;
 use embassy_net::tcp::TcpSocket;
 use embassy_net::StackResources;
@@ -23,7 +22,7 @@ use embassy_time::Delay;
 use embedded_hal_bus::spi::ExclusiveDevice;
 use embedded_io_async::Write;
 use static_cell::StaticCell;
-use {defmt_rtt as _, panic_probe as _};
+use panic_halt as _;
 
 // ═══════════════════════════════════════════════════════════════════
 // CONCEPT: Interrupt binding
@@ -97,8 +96,6 @@ async fn main(spawner: Spawner) -> ! {
     }
     let p = embassy_stm32::init(config);
 
-    info!("W5500 Rotator Controller starting...");
-
     // ───────────────────────────────────────────────────────────────
     // CONCEPT: Async SPI with DMA
     // ───────────────────────────────────────────────────────────────
@@ -114,7 +111,7 @@ async fn main(spawner: Spawner) -> ! {
     // On the STM32L432, DMA channels have fixed peripheral mappings:
     // SPI1_RX = DMA1_CH2, SPI1_TX = DMA1_CH3.
     let mut spi_cfg = spi::Config::default();
-    spi_cfg.frequency = Hertz(2_000_000); // 2 MHz — conservative start
+    spi_cfg.frequency = Hertz(20_000_000); // 20 MHz
     #[allow(unused_mut)] // mut needed only for test-spi feature
     let mut spi = Spi::new(
         p.SPI1, p.PA5, p.PA7, p.PA6, // SCK, MOSI, MISO
@@ -251,7 +248,6 @@ async fn main(spawner: Spawner) -> ! {
     spawner.spawn(net_task(runner).unwrap());
 
     // Static IP — no DHCP wait needed
-    info!("Network up! Config: {:?}", stack.config_v4());
 
     // ───────────────────────────────────────────────────────────────
     // CONCEPT: TCP server loop
@@ -269,17 +265,12 @@ async fn main(spawner: Spawner) -> ! {
         let mut socket = TcpSocket::new(stack, &mut rx_buf, &mut tx_buf);
         socket.set_timeout(Some(embassy_time::Duration::from_secs(30)));
 
-        info!("Listening on port 4533...");
-        if let Err(e) = socket.accept(4533).await {
-            warn!("Accept error: {:?}", e);
+        if let Err(_) = socket.accept(4533).await {
             continue;
         }
-        info!("Client connected: {:?}", socket.remote_endpoint());
 
         // Handle this connection
         handle_connection(&mut socket).await;
-
-        info!("Client disconnected");
     }
 
     } // #[cfg(not(feature = "test-spi"))]
@@ -376,7 +367,6 @@ async fn process_command(line: &[u8], socket: &mut TcpSocket<'_>) -> Result<(), 
 
         // ── Stop ────────────────────────────────────────────────
         b"S" | b"\\stop" => {
-            info!("Stop command received");
             socket.write_all(b"RPRT 0\n").await.map_err(|_| ())?;
         }
 
@@ -415,7 +405,6 @@ async fn process_command(line: &[u8], socket: &mut TcpSocket<'_>) -> Result<(), 
                     ROTATOR.azimuth = az;
                     ROTATOR.elevation = el;
                 }
-                info!("Set position: az={}, el={}", az, el);
                 socket.write_all(b"RPRT 0\n").await.map_err(|_| ())?;
             } else {
                 socket.write_all(b"RPRT -1\n").await.map_err(|_| ())?;
@@ -424,7 +413,6 @@ async fn process_command(line: &[u8], socket: &mut TcpSocket<'_>) -> Result<(), 
 
         // ── Unknown command ─────────────────────────────────────
         _ => {
-            warn!("Unknown command");
             socket.write_all(b"RPRT -1\n").await.map_err(|_| ())?;
         }
     }
