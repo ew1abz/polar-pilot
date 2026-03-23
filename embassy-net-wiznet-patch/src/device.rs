@@ -80,10 +80,8 @@ impl<C: Chip, SPI: SpiDevice> WiznetDevice<C, SPI> {
             _phantom: PhantomData,
         };
 
-        // Skip software reset — the hardware reset pin (driven by lib.rs)
-        // already resets the chip.  A second SW reset via MR=0x80 clears
-        // PHYCFGR[7], putting the PHY back into reset and breaking link
-        // detection.
+        // Reset device
+        this.bus_write(C::COMMON_MODE, &[0x80]).await?;
 
         // Check the version of the chip
         let mut version = [0];
