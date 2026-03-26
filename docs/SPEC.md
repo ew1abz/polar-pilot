@@ -12,21 +12,47 @@ listens for rotctld-compatible TCP connections on port 4533.
 | Component       | Part             | Notes                              |
 |-----------------|------------------|------------------------------------|
 | MCU             | STM32L432KC      | Cortex-M4F, 80 MHz, 256 KB flash   |
-| Ethernet        | W5500            | Hardwired TCP/IP, SPI interface    |
 | Board           | Nucleo-L432KC    | Nucleo-32 form factor, ST-Link v2  |
+| Ethernet        | W5500            | Hardwired TCP/IP, SPI interface    |
+| Display         | SSD1306          | 128×64 OLED, I2C                   |
+| AZ stepper      | A4988 or similar | STEP/DIR/EN interface              |
+| EL stepper      | A4988 or similar | STEP/DIR/EN interface              |
+| Navigation      | 5-way button     | UP/DOWN/LEFT/RIGHT/CENTER          |
+| Endstops        | Microswitch ×2   | Active-low, internal pull-up       |
 
-### Pin Assignments (SPI1)
+### Pin Assignments
 
-All signals are on the CN3 (right) header, pins A2–A7 — six consecutive pins.
+32 kHz oscillator must be disabled by jumpers (SB1/SB2) to free PC14/PC15
+for GPIO.
 
-| Function | STM32 Pin | Nucleo-32 Label | W5500 Pin |
-|----------|-----------|-----------------|-----------|
-| RST      | PA2       | A7              | RSTn      |
-| MOSI     | PA7       | A6              | MOSI      |
-| MISO     | PA6       | A5              | MISO      |
-| SCK      | PA5       | A4              | SCLK      |
-| CS       | PA4       | A3              | SCSn      |
-| INT      | PA3       | A2              | INTn      |
+| Pin  | Label | Function   | Peripheral   | Notes                         |
+|------|-------|------------|--------------|-------------------------------|
+| PA0  | A0    | EL STEP    | TIM2_CH1     | HW pulse generation           |
+| PA1  | A1    | W5500 RST  | GPIO output  |                               |
+| PA3  | A2    | W5500 INT  | EXTI3        |                               |
+| PA4  | A3    | SPI1 CS    | GPIO output  | W5500 chip select             |
+| PA5  | A4    | SPI1 SCK   | SPI1         | W5500                         |
+| PA6  | A5    | SPI1 MISO  | SPI1         | W5500                         |
+| PA7  | A6    | SPI1 MOSI  | SPI1         | W5500                         |
+| PA2  | A7    | USART2 TX  | USART2 (AF7) | ST-LINK virtual COM           |
+| PA10 | D0    | AZ Home    | GPIO input   | Pull-up, active-low endstop   |
+| PA9  | D1    | EL DIR     | GPIO output  |                               |
+| PA12 | D2    | Nav RIGHT  | GPIO input   | Pull-up                       |
+| PB0  | D3    | Nav DOWN   | GPIO input   | Pull-up                       |
+| PB7  | D4    | I2C1_SDA   | I2C1         | SSD1306 display               |
+| PB6  | D5    | I2C1_SCL   | I2C1         | SSD1306 display               |
+| PB1  | D6    | Nav UP     | GPIO input   | Pull-up                       |
+| PC14 | D7    | AZ DIR     | GPIO output  |                               |
+| PC15 | D8    | Nav CENTER | GPIO input   | Pull-up                       |
+| PA8  | D9    | AZ STEP    | TIM1_CH1     | HW pulse generation           |
+| PA11 | D10   | Nav LEFT   | GPIO input   | Pull-up                       |
+| PB5  | D11   | EL Home    | GPIO input   | Pull-up, active-low endstop   |
+| PB4  | D12   | Motor EN   | GPIO output  | Shared stepper EN, active-low |
+| PB3  | D13   | Heartbeat  | GPIO output  | Onboard LED (LD3)             |
+| PA15 | —     | USART2 RX  | USART2 (AF3) | ST-LINK VCP, not on headers   |
+
+**Peripherals used:** SPI1 (W5500), I2C1 (SSD1306), USART2 (serial/Easycom),
+TIM2 (EL step), TIM1 (AZ step), RNG, DMA1_CH2/CH3 (SPI RX/TX).
 
 ## Software Architecture
 
@@ -180,6 +206,7 @@ silent failures.
 - **No heap** — all buffers are stack-allocated or static.
 - **Single TCP connection** — the W5500 has 8 sockets but one is sufficient
   for rotctld; keeps the code simple.
-- **Stub rotator state** — azimuth/elevation are stored in-memory only.
-  Actual motor control is out of scope for this example.
+- **Stub rotator state** — azimuth/elevation are currently stored in-memory
+  only. Stepper motor control via TIM2/TIM1 hardware pulse generation is
+  planned.
 - **No TLS** — rotctld is plaintext.

@@ -43,7 +43,7 @@ async fn main(_spawner: Spawner) -> ! {
     let mut az_dir = Output::new(p.PC14, Level::Low, Speed::Low);
     let mut el_dir = Output::new(p.PA9, Level::Low, Speed::Low);
 
-    // ── AZ STEP — TIM2 channel 1 on PA0 ─────────────────────────
+    // ── EL STEP — TIM2 channel 1 on PA0 ─────────────────────────
     //
     // SimplePwm configures the timer in edge-aligned PWM mode:
     //   - ARR (auto-reload) sets the period  → controls step frequency
@@ -52,10 +52,10 @@ async fn main(_spawner: Spawner) -> ! {
     //
     // Frequency = steps per second.  For a 200-step motor with 16x
     // microstepping, 1000 Hz ≈ 0.3 RPM — nice and slow for testing.
-    let az_step = PwmPin::new(p.PA0, OutputType::PushPull);
-    let mut az_pwm = SimplePwm::new(
+    let el_step = PwmPin::new(p.PA0, OutputType::PushPull);
+    let mut el_pwm = SimplePwm::new(
         p.TIM2,
-        Some(az_step),
+        Some(el_step),
         None, // CH2 unused
         None, // CH3 unused
         None, // CH4 unused
@@ -67,21 +67,21 @@ async fn main(_spawner: Spawner) -> ! {
     // For real stepper drivers (DRV8825) you'd use a narrow pulse (~5 µs),
     // but for this demo symmetric is clearer.
     {
-        let mut ch = az_pwm.ch1();
+        let mut ch = el_pwm.ch1();
         ch.set_duty_cycle(ch.max_duty_cycle() / 2);
         ch.enable();
     }
 
-    info!("AZ STEP: PA0, TIM2_CH1, 1000 Hz");
+    info!("EL STEP: PA0, TIM2_CH1, 1000 Hz");
 
-    // ── EL STEP — TIM1 channel 1 on PA8 ─────────────────────────
+    // ── AZ STEP — TIM1 channel 1 on PA8 ─────────────────────────
     //
     // TIM1 is an "advanced" timer (has break/deadtime features for
     // motor control).  For simple PWM it works identically to TIM2.
-    let el_step = PwmPin::new(p.PA8, OutputType::PushPull);
-    let mut el_pwm = SimplePwm::new(
+    let az_step = PwmPin::new(p.PA8, OutputType::PushPull);
+    let mut az_pwm = SimplePwm::new(
         p.TIM1,
-        Some(el_step),
+        Some(az_step),
         None,
         None,
         None,
@@ -90,12 +90,12 @@ async fn main(_spawner: Spawner) -> ! {
     );
 
     {
-        let mut ch = el_pwm.ch1();
+        let mut ch = az_pwm.ch1();
         ch.set_duty_cycle(ch.max_duty_cycle() / 2);
         ch.enable();
     }
 
-    info!("EL STEP: PA8, TIM1_CH1, 500 Hz");
+    info!("AZ STEP: PA8, TIM1_CH1, 500 Hz");
 
     // ── Demo loop: toggle direction every 2 s ────────────────────
     //
@@ -111,11 +111,11 @@ async fn main(_spawner: Spawner) -> ! {
         forward = !forward;
         if forward {
             az_dir.set_low();
-            el_dir.set_low();
+            // el_dir.set_low();
             info!("Direction: forward");
         } else {
             az_dir.set_high();
-            el_dir.set_high();
+            // el_dir.set_high();
             info!("Direction: reverse");
         }
     }
