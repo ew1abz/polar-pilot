@@ -59,6 +59,11 @@ embedded-hal-bus = { version = "0.3", features = ["async"] }
 # ── Async I/O traits (Write::write_all, etc.) ───────────────────
 embedded-io-async = "0.7"
 
+# ── OLED display ───────────────────────────────────────────────────
+ssd1306 = "0.9"
+embedded-graphics = "0.8"
+heapless = "0.8"
+
 # ── Logging via RTT (Real-Time Transfer) ─────────────────────────
 defmt = "1"
 defmt-rtt = "1"
