@@ -8,7 +8,7 @@ icon. This is the primary local UI for the rotator controller.
 
 ## Display Layout
 
-```
+```text
 ┌──────────────────────────────────┐  128 x 64 px
 │          N                       │
 │      ·───┼───·   AZ: 045.0°     │  Status text area
@@ -40,13 +40,15 @@ icon. This is the primary local UI for the rotator controller.
 - A **5x5 pixel airplane bitmap** plotted at the computed (x, y) from the
   current azimuth and elevation
 - Bitmap (5x5, 1-bit):
-  ```
+
+  ```text
   . . # . .
   . . # . .
   # # # # #
   . # # # .
   . # . # .
   ```
+
 - The airplane is drawn with simple pixel-set calls (no rotation) — it always
   points "up" on screen (north)
 - When the position is at the exact center (el=90°), draw the airplane at
@@ -65,7 +67,7 @@ icon. This is the primary local UI for the rotator controller.
 
 Given azimuth `az` (0..360°) and elevation `el` (0..90°):
 
-```
+```text
 angle_rad = az * PI / 180.0          // 0 = North (up), CW
 r_px      = OUTER_R * (1.0 - el / 90.0)
 x         = cx + r_px * sin(angle_rad)
@@ -97,9 +99,9 @@ or a small integer lookup table for sin/cos.
 
 A new **display_task** joins the existing three async tasks:
 
-```
-4. display_task — reads current az/el (from shared state), redraws the
-   polar diagram on the SSD1306 every 250 ms via I2C1 (PB6/PB7)
+```text
+4. display_task — reads current az/el (from shared state), redraws
+   the polar diagram on the SSD1306 every 250 ms via I2C1 (PB6/PB7)
 ```
 
 Shared rotator state (azimuth, elevation, link status) is accessed via a

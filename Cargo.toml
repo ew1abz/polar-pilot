@@ -37,6 +37,9 @@ embassy-time = { version = "0.5", features = [
     "tick-hz-32_768",
 ] }
 
+# ── Async synchronization primitives (Watch, Channel) ────────────
+embassy-sync = { version = "0.6", features = ["defmt"] }
+
 # ── Networking ───────────────────────────────────────────────────
 # embassy-net is a sans-std TCP/IP stack (wraps smoltcp internally).
 # We enable TCP + DHCPv4.
@@ -63,6 +66,7 @@ embedded-io-async = "0.7"
 ssd1306 = "0.9"
 embedded-graphics = "0.8"
 heapless = "0.8"
+libm = "0.2"
 
 # ── Logging via RTT (Real-Time Transfer) ─────────────────────────
 defmt = "1"

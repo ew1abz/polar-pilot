@@ -5,7 +5,7 @@ Nucleo-32 board. Each test is self-contained — no dependencies between them.
 
 ## Prerequisites
 
-```
+```bash
 rustup target add thumbv7em-none-eabihf
 cargo install probe-rs-tools
 ```
@@ -23,7 +23,7 @@ LED turns on while any button is held.
 **Pins**: UP=PB1, DOWN=PB0, LEFT=PA11, RIGHT=PA12, CENTER=PC15
 (active-low, internal pull-up)
 
-```
+```bash
 cargo run --release --bin button_test
 ```
 
@@ -35,7 +35,7 @@ Toggles direction on both axes every 2 seconds. LED blinks as heartbeat.
 **Pins**: AZ STEP=PA8 (TIM1), EL STEP=PA0 (TIM2), AZ DIR=PC14, EL DIR=PA9,
 Motor EN=PB4 (active-low)
 
-```
+```bash
 cargo run --release --bin motor_test
 ```
 
@@ -47,8 +47,22 @@ LED toggles each update.
 
 **Pins**: I2C1 — PB6/SCL, PB7/SDA (address 0x3C)
 
-```
+```bash
 cargo run --release --bin oled_test
+```
+
+### endstop_test — AZ/EL homing with endstops
+
+Drives both steppers at 200 Hz toward home. When an endstop
+triggers (active-low), that axis stops. LED blinks fast once
+both axes are homed. Skips axes already at home on startup.
+
+**Pins**: AZ STEP=PA8 (TIM1), EL STEP=PA0 (TIM2), AZ DIR=PC14,
+EL DIR=PA9, Motor EN=PB4 (active-low), AZ Home=PA10, EL Home=PB5
+(active-low, pull-up)
+
+```bash
+cargo run --release --bin endstop_test
 ```
 
 ### w5500_test — W5500 SPI Ethernet
@@ -58,7 +72,7 @@ Expects `0x04`. Logs attempt count and blinks LED fast on success.
 
 **Pins**: SPI1 (PA5/SCK, PA6/MISO, PA7/MOSI, PA4/CS), RST=PA1
 
-```
+```bash
 cargo run --release --bin w5500_test
 ```
 

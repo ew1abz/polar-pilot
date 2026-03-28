@@ -11,7 +11,7 @@ primitives — no mutexes, no critical sections in application code.
 
 A single `RotatorState` struct is the central coordination point:
 
-```
+```text
 RotatorState
 ├── target_az:  f32          // commanded azimuth   (0..360)
 ├── target_el:  f32          // commanded elevation  (0..90)
@@ -21,7 +21,8 @@ RotatorState
 └── link_up:    bool         // Ethernet link status
 ```
 
-**Primitive**: `embassy_sync::watch::Watch<CriticalSectionRawMutex, RotatorState, 4>`
+**Primitive**:
+`embassy_sync::watch::Watch<CriticalSectionRawMutex, RotatorState, 4>`
 
 - Writers call `watch.sender().send(state)` — non-blocking, overwrites
 - Readers call `watch.receiver().changed().await` — wakes on new value
@@ -36,11 +37,11 @@ target values; the motor task reads targets and updates current position.
 Target position commands from multiple sources funnel through a single
 channel:
 
-```
+```rust
 embassy_sync::channel::Channel<CriticalSectionRawMutex, RotatorCmd, 4>
 ```
 
-```
+```rust
 enum RotatorCmd {
     GoTo { az: f32, el: f32 },
     Stop,
@@ -55,7 +56,7 @@ newest command takes effect immediately.
 
 ## Task Map
 
-```
+```text
                        ┌──────────────┐
                        │     main     │
                        │  (init only) │
@@ -207,9 +208,9 @@ sampling.
 
 ## Data Flow Summary
 
-```
+```text
  [rotctld TCP]──┐
- [easycom UART]─┤  RotatorCmd   ┌────────────┐  Watch   ┌──────────┐
+ [easycom UART]─┤  RotatorCmd   ┌─────────────┐  Watch   ┌──────────┐
  [5-way keys]───┴──────────────►│ motor_task  ├─────────►│ display  │
                                 │             │          │  (OLED)  │
                                 │ TIM1+TIM2   │─────────►│          │
