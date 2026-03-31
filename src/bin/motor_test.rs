@@ -20,7 +20,7 @@ use embassy_stm32::gpio::{Level, Output, OutputType, Speed};
 use embassy_stm32::time::Hertz;
 use embassy_stm32::timer::simple_pwm::{PwmPin, SimplePwm};
 use embassy_time::{Duration, Ticker, Timer};
-use {defmt_rtt as _, panic_probe as _};
+use {defmt_rtt as _, panic_reset as _};
 
 #[embassy_executor::main]
 async fn main(spawner: Spawner) -> ! {

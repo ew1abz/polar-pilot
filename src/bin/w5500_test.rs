@@ -18,7 +18,7 @@ use embassy_stm32::gpio::{Level, Output, Speed};
 use embassy_stm32::spi::{self, Spi};
 use embassy_stm32::time::Hertz;
 use embassy_time::{Duration, Ticker, Timer};
-use {defmt_rtt as _, panic_probe as _};
+use {defmt_rtt as _, panic_reset as _};
 
 embassy_stm32::bind_interrupts!(struct Irqs {
     DMA1_CHANNEL2 => embassy_stm32::dma::InterruptHandler<embassy_stm32::peripherals::DMA1_CH2>;

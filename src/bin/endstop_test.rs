@@ -23,7 +23,7 @@ use embassy_stm32::gpio::{Input, Level, Output, OutputType, Pull, Speed};
 use embassy_stm32::time::Hertz;
 use embassy_stm32::timer::simple_pwm::{PwmPin, SimplePwm};
 use embassy_time::{Duration, Ticker, Timer};
-use {defmt_rtt as _, panic_probe as _};
+use {defmt_rtt as _, panic_reset as _};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {
@@ -72,7 +72,7 @@ async fn main(_spawner: Spawner) -> ! {
     }
 
     // ── Motor enable (active-low) ───────────────────────────────
-    let _motor_en = Output::new(p.PB4, Level::Low, Speed::Low);
+    let mut motor_en = Output::new(p.PB4, Level::Low, Speed::Low);
     info!("Motor EN asserted (PB4 low)");
 
     // ── Direction pins — set toward home ────────────────────────
@@ -153,6 +153,7 @@ async fn main(_spawner: Spawner) -> ! {
 
         if az_homed && el_homed {
             info!("Both axes homed!");
+            motor_en.set_high();
             blink_fast(&mut led).await;
         }
     }

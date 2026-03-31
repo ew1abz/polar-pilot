@@ -26,7 +26,7 @@ use ssd1306::rotation::DisplayRotation;
 use ssd1306::size::DisplaySize128x64;
 use ssd1306::I2CDisplayInterface;
 use ssd1306::Ssd1306;
-use {defmt_rtt as _, panic_probe as _};
+use {defmt_rtt as _, panic_reset as _};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {

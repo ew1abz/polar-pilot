@@ -12,7 +12,7 @@ use defmt::*;
 use embassy_executor::Spawner;
 use embassy_stm32::gpio::{Input, Level, Output, Pull, Speed};
 use embassy_time::{Duration, Ticker};
-use {defmt_rtt as _, panic_probe as _};
+use {defmt_rtt as _, panic_reset as _};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {

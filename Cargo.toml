@@ -1,7 +1,8 @@
 [package]
 name = "w5500-rotator"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
+default-run = "w5500-rotator"
 
 [dependencies]
 # ── Embassy runtime ──────────────────────────────────────────────
@@ -72,8 +73,11 @@ libm = "0.2"
 defmt = "1"
 defmt-rtt = "1"
 
-# ── Panic handler — prints via defmt then halts ─────────────────
-panic-probe = { version = "1", features = ["print-defmt"] }
+# ── Panic handler — reset on panic (no debugger required) ────────
+# panic-probe halts via bkpt() which causes HardFault without a debugger.
+# panic-reset resets the chip instead, safe for standalone operation.
+# To see panic messages during development: swap back to panic-probe.
+panic-reset = "0.1"
 
 # ── Static allocation helper ─────────────────────────────────────
 # Embassy tasks need 'static data.  StaticCell lets you safely
