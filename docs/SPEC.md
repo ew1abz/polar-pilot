@@ -2,10 +2,12 @@
 
 ## Overview
 
-Embedded Rust firmware for an antenna rotator controller using the Hamlib
-network protocol (rotctld). Runs on an STM32L432 Nucleo-32 board with a
-W5500 SPI Ethernet module. The device obtains an IP address via DHCP and
-listens for rotctld-compatible TCP connections on port 4533.
+Bare-metal Rust firmware ("Polar Pilot") for a two-axis antenna rotator
+controller. Runs on an STM32L432 Nucleo-32 board with a W5500 SPI Ethernet
+module, SSD1306 OLED display, two stepper motor drivers, a 5-way navigation
+button, and two homing endstops. Supports Hamlib rotctld (TCP :4533) and
+EasyComm II (USART2 serial), with a polar-chart local display and automatic
+homing on power-on.
 
 ## Hardware
 
@@ -60,8 +62,20 @@ and I2C1 (SSD1306) cannot operate simultaneously. See UM1956 §7.10.
 | PB3  | D13   | Heartbeat  | GPIO output  | Onboard LED (LD3)             |
 | PA15 | —     | USART2 RX  | USART2 (AF3) | ST-LINK VCP, not on headers   |
 
-**Peripherals used:** SPI1 (W5500), I2C1 (SSD1306), USART2 (serial/Easycom),
-TIM2 (EL step), TIM1 (AZ step), RNG, DMA1_CH2/CH3 (SPI RX/TX).
+**Peripherals used:** SPI1 (W5500), I2C1 (SSD1306), USART2 (serial/EasyComm),
+TIM1 (AZ step), TIM2 (EL step), TIM15 (Embassy time driver), RNG,
+DMA1_CH2/CH3 (SPI RX/TX), DMA1_CH6/CH7 (USART2 RX/TX).
+
+### Standalone Operation (No USB)
+
+When powered from an external 3.3 V supply without a USB cable, the ST-LINK
+section is unpowered and its nRST output holds the MCU in reset indefinitely.
+
+**Fix**: bridge **CN2 pin 4** (ST-LINK VDD, 3.3 V) to **CN4 pin 14** (main
+3.3 V rail) with a jumper wire. This keeps the ST-LINK powered, releases
+nRST, and the MCU boots normally without USB.
+
+> CN2 is the 4-pin SWD debug connector; CN4 is the right-side morpho header.
 
 ## Software Architecture
 
@@ -72,7 +86,7 @@ TIM2 (EL step), TIM1 (AZ step), RNG, DMA1_CH2/CH3 (SPI RX/TX).
 | `embassy-executor`   | Async task executor                    |
 | `embassy-stm32`      | HAL for STM32L4 (SPI, I2C, GPIO, …)   |
 | `embassy-time`       | Timekeeping (TIM15 driver, Ticker)     |
-| `embassy-sync`       | Watch + Channel for inter-task comms   |
+| `embassy-sync`       | Watch + Channel + Mutex for inter-task comms |
 | `embassy-net`        | TCP/IP stack (TCP, DHCPv4)             |
 | `embassy-net-wiznet` | W5500 driver for embassy-net           |
 | `embedded-hal-bus`   | SPI ExclusiveDevice wrapper            |
@@ -81,8 +95,8 @@ TIM2 (EL step), TIM1 (AZ step), RNG, DMA1_CH2/CH3 (SPI RX/TX).
 | `embedded-graphics`  | 2D drawing primitives for OLED         |
 | `heapless`           | Fixed-capacity String/Vec (no alloc)   |
 | `libm`               | Software float math (sinf, cosf)       |
-| `defmt` + `defmt-rtt`| Logging via RTT                        |
-| `panic-probe`        | Panic handler for probe-based debug    |
+| `defmt` + `defmt-rtt`| Logging via RTT (non-blocking)         |
+| `panic-reset`        | Reset on panic — safe for standalone   |
 | `static_cell`        | One-time `'static` init for task data  |
 | `cortex-m` / `cortex-m-rt` | Runtime + vector table           |
 
@@ -94,18 +108,21 @@ per-task peripheral assignments. Summary:
 1. **main** — Inits clocks (80 MHz), peripherals, spawns all tasks, then idles.
 2. **ethernet_task** — Pumps W5500 SPI driver (embassy-net-wiznet Runner).
 3. **net_task** — Drives TCP/IP stack (DHCP, ARP, timers).
-4. **motor_task** — Receives commands, slews steppers via TIM1/TIM2
-   PWM, checks endstops, publishes state.
-5. **display_task** — Renders polar diagram + status on SSD1306 OLED at 4 Hz.
-6. **key_task** — Debounces 5-way nav buttons at 20 ms, sends GoTo/Stop commands.
-7. **rotctld_task** — TCP server on :4533, Hamlib rotctld protocol subset.
-8. **easycom_task** — USART2 serial, EasyComm II protocol.
-9. **led_task** — PB3 heartbeat at 1 Hz.
+4. **dhcp_watchdog_task** — Waits 120 s for DHCP; falls back to static IP.
+5. **motor_task** — Receives commands, slews steppers via TIM1/TIM2 PWM,
+   runs homing sequence on power-on, publishes state.
+6. **display_task** — Renders polar diagram + status on SSD1306 OLED at 4 Hz.
+7. **key_task** — Debounces 5-way nav buttons at 20 ms, sends GoTo/Stop commands.
+8. **rotctld_task** — TCP server on :4533, Hamlib rotctld protocol subset.
+9. **easycom_task** — USART2 serial, EasyComm II protocol.
+10. **led_task** — PB3 heartbeat at 1 Hz.
 
 ### Network Configuration
 
-- **DHCP client**: Enabled. No static fallback.
-- **MAC address**: Locally-administered, hardcoded (e.g. `02:00:00:00:00:01`).
+- **DHCP client**: Enabled. Falls back to static IP after 120 s if no offer arrives.
+- **Static fallback**: `192.168.1.200/24`, gateway `192.168.1.1`
+  (configurable at the top of `src/tasks/net.rs`).
+- **MAC address**: Locally-administered, hardcoded (`02:00:00:00:00:01`).
 - **Listen port**: 4533 (TCP).
 
 ## Rotctld Protocol (Hamlib)
@@ -115,29 +132,49 @@ a single line terminated by `\n`. Responses are also newline-terminated.
 
 ### Supported Commands
 
-| Command          | Description              | Response Format              |
-|------------------|--------------------------|------------------------------|
-| `p`              | Get position             | `<azimuth>\n<elevation>\n`   |
-| `P <az> <el>`    | Set position             | `RPRT 0\n` on success        |
-| `S`              | Stop rotation            | `RPRT 0\n`                   |
-| `q`              | Quit (close connection)  | (connection closed)          |
-| `_`              | Get info                 | `Model: Polar Pilot\n`       |
-| `\dump_state`    | Dump state (compatibility) | Minimal state block        |
+| Command                        | Alias              | Description              | Response                     |
+|--------------------------------|--------------------|--------------------------|------------------------------|
+| `p`                            | `\get_pos`         | Get position             | `<az>\n<el>\n`               |
+| `P <az> <el>`                  | `\set_pos <az> <el>` | Set position           | `RPRT 0\n`                   |
+| `S`                            | `\stop`            | Stop rotation            | `RPRT 0\n`                   |
+| `l`                            | `\get_limits`      | Get soft limits          | `az_min\naz_max\nel_min\nel_max\nRPRT 0\n` |
+| `L <az_min> <az_max> <el_min> <el_max>` | `\set_limits …` | Set soft limits | `RPRT 0\n`          |
+| `q`                            | `\quit`            | Close connection         | (connection closed)          |
+| `_`                            | `\get_info`        | Get info                 | `Model: Polar Pilot\n`       |
+| `\dump_state`                  | —                  | Hamlib compatibility     | State block with current limits |
 
-Unrecognized commands return `RPRT -1\n`.
+When `Phase::Fault`, `p`, `P`, and `S` all respond with:
+```text
+FAULT: <message>
+RPRT -9
+```
+`RPRT -9` is Hamlib's "command rejected" code. Unrecognized commands return `RPRT -1\n`.
 
 ### `\dump_state` Response
+
+The `min_az/max_az/min_el/max_el` fields reflect the current soft limits:
 
 ```text
 0
 rot_model=0
-min_az=0.0
-max_az=360.0
-min_el=0.0
-max_el=90.0
+min_az=<az_min>
+max_az=<az_max>
+min_el=<el_min>
+max_el=<el_max>
 0
 0
 ```
+
+## EasyComm II Protocol
+
+| Command                           | Description                        | Response                          |
+|-----------------------------------|------------------------------------|-----------------------------------|
+| `AZ`                              | Query position                     | `AZ<az> EL<el>\n`                 |
+| `AZ<az> EL<el>`                   | Set position                       | (none)                            |
+| `SA` / `SE` / `SA SE`             | Stop                               | (none)                            |
+| `LM`                              | Get soft limits                    | `LM az_min az_max el_min el_max\n`|
+| `LM <az_min> <az_max> <el_min> <el_max>` | Set soft limits           | (none)                            |
+| `VE`                              | Version query                      | `Polar Pilot v0.1\n`              |
 
 ## Build & Flash
 
@@ -162,6 +199,16 @@ cargo run --release
 
 (Configured via `.cargo/config.toml` to use `probe-rs run`.)
 
+### Test Binaries
+
+```bash
+cargo run --release --bin w5500_test
+cargo run --release --bin button_test
+cargo run --release --bin motor_test
+cargo run --release --bin oled_test
+cargo run --release --bin endstop_test
+```
+
 ### Binary Size
 
 Release build (`opt-level = "s"`, LTO):
@@ -185,16 +232,29 @@ has the static-IP-only builds (with and without defmt) for reference.
 ├── memory.x                        # Flash/RAM layout for STM32L432
 ├── Cargo.toml
 ├── src/
-│   ├── main.rs                     # all 9 async tasks (single-file firmware)
+│   ├── main.rs                     # peripheral init, task spawning
+│   ├── types.rs                    # RotatorState, RotatorCmd, Phase, SoftLimits, statics
+│   ├── util.rs                     # parse_f32, parse_f32_bytes, line helpers
+│   ├── tasks/
+│   │   ├── motor.rs                # motor_task — homing, slewing, endstops
+│   │   ├── display.rs              # display_task — SSD1306 polar chart
+│   │   ├── keys.rs                 # key_task — 5-way button
+│   │   ├── rotctld.rs              # rotctld_task — TCP :4533
+│   │   ├── easycom.rs              # easycom_task — USART2 EasyComm II
+│   │   └── net.rs                  # ethernet_task, net_task, led_task, dhcp_watchdog_task
 │   └── bin/                        # standalone hardware test binaries
 │       ├── w5500_test.rs
 │       ├── button_test.rs
 │       ├── motor_test.rs
-│       └── oled_test.rs
+│       ├── oled_test.rs
+│       └── endstop_test.rs
 ├── docs/
 │   ├── SPEC.md                     # this file
 │   ├── TASK_ARCHITECTURE.md        # task data flow and peripheral map
-│   └── OLED_POLAR_DISPLAY.md       # OLED rendering details
+│   ├── OLED_POLAR_DISPLAY.md       # OLED rendering details
+│   ├── HOMING.md                   # homing algorithm and fault handling
+│   ├── MANUAL_CONTROL.md           # 5-way button behaviour
+│   └── EEPROM_EMULATION.md         # (future) persistent configuration
 └── embassy-net-wiznet-patch/       # local W5500 driver patches
 ```
 

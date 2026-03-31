@@ -28,9 +28,6 @@ Test binaries in `src/bin/` exercise individual peripherals.
 
 ## Architecture
 
-Everything lives in `src/main.rs` — intentionally a single-file
-project.
-
 **Nine concurrent async tasks** on the Embassy executor,
 communicating via two shared primitives:
 
@@ -64,6 +61,22 @@ communicating via two shared primitives:
    (embassy-net-wiznet Runner)
 8. **net_task** — drives TCP/IP stack (DHCP, ARP, timers)
 9. **led_task** — PB3 heartbeat at 1 Hz
+
+**Source layout:**
+
+```text
+src/
+  main.rs           — clocks, peripheral init, task spawning
+  types.rs          — RotatorState, RotatorCmd, Phase, STATE/CMD statics
+  util.rs           — parse_f32, parse_f32_bytes, line_contains, extract_value_after
+  tasks/
+    motor.rs        — motor_task
+    display.rs      — display_task
+    keys.rs         — key_task
+    rotctld.rs      — rotctld_task
+    easycom.rs      — easycom_task
+    net.rs          — ethernet_task, net_task, led_task
+```
 
 See `docs/TASK_ARCHITECTURE.md` for detailed data flow diagrams
 and per-task peripheral assignments.

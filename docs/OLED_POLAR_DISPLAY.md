@@ -2,120 +2,162 @@
 
 ## Overview
 
-The SSD1306 128x64 OLED shows a polar diagram representing the antenna's
-azimuth/elevation, with the current position indicated by a small airplane
-icon. This is the primary local UI for the rotator controller.
+The SSD1306 128×64 OLED shows a polar diagram representing the antenna's
+azimuth and elevation, with the current position indicated by an airplane icon.
+This is the primary local UI for the rotator controller.
 
 ## Display Layout
 
 ```text
-┌──────────────────────────────────┐  128 x 64 px
-│          N                       │
-│      ·───┼───·   AZ: 045.0°     │  Status text area
-│    /     |     \  EL: 30.0°     │  (right side,
-│  W──────·┼·──────E              │   ~40 px wide)
-│    \     |     /                 │
-│      ·───┼───·                   │
-│          S         ✈             │
-│                   DHCP OK        │  Bottom-right:
-└──────────────────────────────────┘  network status
+┌──────────────────────────────────┐  128 × 64 px
+│  N                               │
+│    ┌─────────┐   AZ: 045        │
+│    │  ·───·  │   EL:  30        │
+│  W─┤──·+·──├─E                 │
+│    │  ·───·  │                   │
+│    └─────────┘   Idle            │
+│  S               192.168.        │
+│                  1.200           │
+└──────────────────────────────────┘
 ```
 
-### Polar Diagram (left region, ~88 x 64 px)
+Left panel (0–78 px): polar chart. Right panel (TX=80 px): status text.
 
-- **Center**: pixel (40, 32)
-- **Concentric rings**: 2 rings at fixed radii representing elevation tiers
-  - Outer ring (r=28 px) = 0° elevation (horizon)
-  - Inner ring (r=14 px) = 45° elevation
-  - Center dot = 90° elevation (zenith)
-- **Crosshair lines**: thin 1 px lines through center, N/S/E/W
-- **Cardinal labels**: N (top), S (bottom), E (right), W (left) — single
-  character, placed just outside the outer ring
-- **Projection**: azimuth maps to angle (0° = up/North, CW), elevation maps
-  to radius (0° = outer ring, 90° = center) using linear interpolation:
-  `r = outer_r * (1.0 - el / 90.0)`
+## Polar Diagram
 
-### Antenna Position Marker
+**Constants** (in `src/tasks/display.rs`):
 
-- A **5x5 pixel airplane bitmap** plotted at the computed (x, y) from the
-  current azimuth and elevation
-- Bitmap (5x5, 1-bit):
+| Constant  | Value | Meaning                        |
+|-----------|-------|--------------------------------|
+| `CX`      | 39    | Chart centre X                 |
+| `CY`      | 32    | Chart centre Y                 |
+| `R_OUTER` | 30    | Outer ring radius (horizon)    |
+| `R_INNER` | 15    | Inner ring radius (45° elev.)  |
 
-  ```text
-  . . # . .
-  . . # . .
-  # # # # #
-  . # # # .
-  . # . # .
-  ```
-
-- The airplane is drawn with simple pixel-set calls (no rotation) — it always
-  points "up" on screen (north)
-- When the position is at the exact center (el=90°), draw the airplane at
-  center
-
-### Status Text (right region, ~40 x 64 px)
-
-- **Line 1** (y=0): `AZ:` followed by azimuth in degrees, 1 decimal
-  (e.g. `045.0`)
-- **Line 2** (y=12): `EL:` followed by elevation in degrees, 1 decimal
-  (e.g. `030.0`)
-- **Line 3** (y=48): Network status — `DHCP OK`, `NO LINK`, or IP last octet
-- Font: 6x8 built-in font from `embedded-graphics`
+- **Outer ring** (r=30 px): horizon (EL = 0°)
+- **Inner ring** (r=15 px): 45° elevation
+- **Centre point**: zenith (EL = 90°)
+- **Crosshair**: 1 px lines through centre, N–S and E–W
+- **Cardinal labels**: `N` (0, 7), `S` (0, 57), `E` (CX+R+3, CY+3),
+  `W` (CX−R−9, CY+3). N and S are on the left margin; E and W flank the ring.
 
 ## Coordinate Mapping
 
-Given azimuth `az` (0..360°) and elevation `el` (0..90°):
-
 ```text
-angle_rad = az * PI / 180.0          // 0 = North (up), CW
-r_px      = OUTER_R * (1.0 - el / 90.0)
-x         = cx + r_px * sin(angle_rad)
-y         = cy - r_px * cos(angle_rad)
+angle_rad = az × π / 180          // 0 = North (up), clockwise
+r         = R_OUTER × (1 − el / 90.0)
+x         = CX + r × sin(angle_rad)
+y         = CY − r × cos(angle_rad)
 ```
 
-Where `cx=40, cy=32, OUTER_R=28`.
+EL > 90° produces negative `r`, which naturally places the dot on the opposite
+azimuth at the mirrored radius — no explicit fold-over needed.
 
-Since `no_std` — use `libm::sinf` / `libm::cosf` (from the `libm` crate)
-or a small integer lookup table for sin/cos.
+`libm::sinf` / `libm::cosf` are used (no hardware trig on Cortex-M4 without FPU
+intrinsics in `no_std`).
+
+## Antenna Position Marker
+
+17-pixel airplane icon: cross arms (±3 in one axis) plus 3×3 filled centre:
+
+```text
+      ·         (0,−3)
+      ·         (0,−2)
+  · · # # # · · (−3..+3, 0) + (−1..+1, −1/0/+1)
+      ·         (0,+2)
+      ·         (0,+3)
+```
+
+Pixel offsets (dx, dy) relative to computed (x, y):
+
+```rust
+const PLANE: [(i32, i32); 17] = [
+                      (0, -3), (0, -2),
+    (-3, 0), (-2, 0),
+    (-1, -1), (0, -1), (1, -1),
+    (-1,  0), (0,  0), (1,  0),
+    (-1,  1), (0,  1), (1,  1),
+               (2, 0), (3, 0),
+                      (0,  2), (0,  3),
+];
+```
+
+## Status Panel (right, TX = 80 px)
+
+| Row  | y   | Content                              |
+|------|-----|--------------------------------------|
+| 1    | 10  | `AZ:` + current azimuth as integer   |
+| 2    | 22  | `EL:` + current elevation as integer |
+| 3    | 40  | Status string (see below)            |
+| 4    | 52  | IP first two octets (`A.B.`)         |
+| 5    | 62  | IP last two octets (`C.D`)           |
+
+Font: `FONT_6X10` from `embedded-graphics`.
+
+### Status String
+
+| `Phase`        | Condition          | Displayed   |
+|----------------|--------------------|-------------|
+| `Homing`       | any                | `Homing`    |
+| `Running`      | moving             | `Moving`    |
+| `Running`      | IP assigned        | `Idle`      |
+| `Running`      | no IP yet          | `No IP`     |
+| `Fault(msg)`   | —                  | fault screen (see below) |
+
+IP is queried directly from the Stack via `stack.config_v4()` — not via
+`RotatorState.link_up` (which is always false).
+
+### IP Address Display
+
+When DHCP has completed, the IP is split across two rows:
+```
+192.168.
+1.200
+```
+While waiting for DHCP (or no IP):
+```
+---.---.
+---.---
+```
+
+## Fault Screen
+
+When `Phase::Fault(msg)` is set, the entire panel is replaced:
+
+```text
+FAULT
+<message>
+Power cycle
+to reset
+```
+
+Text positions: y = 12, 32, 50, 60. The display loops on this screen until
+power is cycled — the fault is unrecoverable.
+
+## Splash Screen
+
+Shown for 2 seconds at boot before homing begins:
+
+- Left 64×64 px: Rust logo (`src/rust.raw`, 1-bpp raw bitmap, `include_bytes!`)
+- Right half:
+  - `"Polar"` at (74, 24)
+  - `"Pilot"` at (74, 38)
+  - `"v<CARGO_PKG_VERSION>"` at (70, 56)
 
 ## Update Rate
 
-- Redraw the display at **4 Hz** (every 250 ms) from the display task
-- Full-frame buffer approach: clear buffer, draw diagram, draw marker, draw
-  text, flush to I2C
-- Use `embedded-graphics` `MonoTextStyle` and `Framebuffer` or
-  `ssd1306::mode::BufferedGraphicsMode`
+4 Hz (250 ms `Ticker`). Full-buffer redraw each tick:
+clear → draw chart → draw marker → draw text → `display.flush()`.
 
-## Dependencies
-
-| Crate               | Purpose                                    |
-|----------------------|--------------------------------------------|
-| `ssd1306`            | SSD1306 I2C driver with buffered mode      |
-| `embedded-graphics`  | Drawing primitives, fonts, image support   |
-| `libm`               | `sinf`/`cosf` for polar coordinate math    |
-
-## Task Integration
-
-A new **display_task** joins the existing three async tasks:
-
-```text
-4. display_task — reads current az/el (from shared state), redraws
-   the polar diagram on the SSD1306 every 250 ms via I2C1 (PB6/PB7)
-```
-
-Shared rotator state (azimuth, elevation, link status) is accessed via a
-`Signal` or by reading from an `embassy_sync::watch::Watch`.
+The blocking I2C flush at 100 kHz takes ~92 ms per frame. `motor_task`
+compensates via its elapsed-time step accumulator (`as_micros()` + fractional
+carry), so virtual position tracks physical motion regardless of display delays.
 
 ## Hardware
 
-- **Display**: SSD1306 128x64, I2C address 0x3C
-- **Bus**: I2C1 — PB6 (SCL), PB7 (SDA)
-- **Speed**: 400 kHz (I2C fast mode)
-
-## Rendering Constraints
-
-- No heap — frame buffer is a static 128x64x1 = 1024-byte array
-- All drawing uses integer arithmetic except the sin/cos for position mapping
-- Total I2C transfer per frame: ~1 KB at 400 kHz = ~20 ms — fits comfortably
-  in the 250 ms budget
+| Item     | Detail                          |
+|----------|---------------------------------|
+| Display  | SSD1306 128×64, I2C addr 0x3C   |
+| Bus      | I2C1 — PB6 (SCL), PB7 (SDA)   |
+| Speed    | 100 kHz (blocking)              |
+| Buffer   | 1024-byte static framebuffer    |
