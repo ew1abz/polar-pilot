@@ -98,7 +98,9 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                 } else if line == "q" || line == "\\quit" {
                     break 'conn;
                 } else if line == "_" || line == "\\get_info" {
-                    let _ = core::write!(resp, "Model: Polar Pilot\n");
+                    let _ = core::write!(resp,
+                        "Model name:\tPolar Pilot\nModel ID:\t2\nMfg name:\tCustom\nSW version:\t{}\nStatus:\t\tAlpha\nMax AZ:\t\t450\nMax EL:\t\t180\nRPRT 0\n",
+                        env!("CARGO_PKG_VERSION"));
                 } else if line == "\\dump_state" {
                     let lim = LIMITS.lock(|c| c.get());
                     let _ = core::write!(resp,
