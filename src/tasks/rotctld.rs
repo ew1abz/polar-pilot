@@ -119,6 +119,15 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                         "Caps dump for model: 2\nModel name:\tPolar Pilot\nMfg name:\tCustom\nBackend version:\t{}\nBackend status:\tAlpha\nRotator type:\tAz-El\nCan set position:\tY\nCan get position:\tY\nCan stop:\tY\nCan reset:\tY\nCan move:\tY\nMin Azimuth:\t{:.2}\nMax Azimuth:\t{:.2}\nMin Elevation:\t{:.2}\nMax Elevation:\t{:.2}\nRPRT 0\n",
                         env!("CARGO_PKG_VERSION"),
                         lim.az_min, lim.az_max, lim.el_min, lim.el_max);
+                } else if line.starts_with("R ") || line.starts_with("\\reset ") || line == "R" || line == "\\reset" {
+                    let state = STATE.try_get().unwrap_or_default();
+                    if let Phase::Fault(msg) = state.phase {
+                        let _ = core::write!(resp, "FAULT: {}\nRPRT -9\n", msg);
+                    } else {
+                        // Any reset type: stop motion and park at 0°/0°
+                        CMD.send(RotatorCmd::GoTo { az: 0.0, el: 0.0 }).await;
+                        let _ = core::write!(resp, "RPRT 0\n");
+                    }
                 } else if line == "q" || line == "\\quit" {
                     break 'conn;
                 } else if line == "_" || line == "\\get_info" {
