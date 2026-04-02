@@ -10,7 +10,8 @@ cargo install probe-rs-tools       # only needed for flashing
 Python 3.10+ is required for the protocol test suite:
 
 ```bash
-python3 -m pip install pytest pytest-timeout
+python3 -m pip install pytest pytest-timeout   # stub + rotctld live tests
+python3 -m pip install pyserial                # EasyComm live tests only
 ```
 
 ## Build
@@ -72,7 +73,14 @@ Set `ROTATOR_HOST` to the device's IP address (DHCP-assigned or static fallback
 `192.168.1.200`):
 
 ```bash
-ROTATOR_HOST=192.168.1.42 python3 -m pytest tests/ --timeout=60
+# rotctld (TCP)
+ROTATOR_HOST=192.168.1.42 python3 -m pytest tests/test_live.py -v --timeout=60
+
+# EasyComm II (serial) -- requires pyserial and a USB-serial adapter on USART2
+ROTATOR_PORT=/dev/ttyUSB0 python3 -m pytest tests/test_easycom.py -v --timeout=60
+
+# Both together
+ROTATOR_HOST=192.168.1.42 ROTATOR_PORT=/dev/ttyUSB0 python3 -m pytest tests/ -v --timeout=60
 ```
 
 Live tests cover DHCP/TCP connectivity, motor convergence to target, stop
