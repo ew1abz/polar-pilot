@@ -95,6 +95,24 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                         }
                         _ => { let _ = core::write!(resp, "RPRT -1\n"); }
                     }
+                } else if line.starts_with("M ") || line.starts_with("\\move ") {
+                    let args = if line.starts_with("M ") { &line[2..] } else { &line[6..] };
+                    let mut parts = args.splitn(2, ' ');
+                    let dir = parts.next().and_then(|s| s.parse::<u8>().ok());
+                    // speed arg is accepted but ignored — motor runs at fixed rate
+                    let _speed = parts.next().and_then(|s| s.parse::<u8>().ok());
+                    let state = STATE.try_get().unwrap_or_default();
+                    if let Phase::Fault(msg) = state.phase {
+                        let _ = core::write!(resp, "FAULT: {}\nRPRT -9\n", msg);
+                    } else {
+                        match dir {
+                            Some(2)  => { CMD.send(RotatorCmd::GoTo { az: state.current_az,  el:  9999.0 }).await; let _ = core::write!(resp, "RPRT 0\n"); }
+                            Some(4)  => { CMD.send(RotatorCmd::GoTo { az: state.current_az,  el: -9999.0 }).await; let _ = core::write!(resp, "RPRT 0\n"); }
+                            Some(8)  => { CMD.send(RotatorCmd::GoTo { az: -9999.0, el: state.current_el  }).await; let _ = core::write!(resp, "RPRT 0\n"); }
+                            Some(16) => { CMD.send(RotatorCmd::GoTo { az:  9999.0, el: state.current_el  }).await; let _ = core::write!(resp, "RPRT 0\n"); }
+                            _        => { let _ = core::write!(resp, "RPRT -1\n"); }
+                        }
+                    }
                 } else if line == "q" || line == "\\quit" {
                     break 'conn;
                 } else if line == "_" || line == "\\get_info" {
