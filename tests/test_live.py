@@ -157,7 +157,7 @@ def test_set_limits_accepted():
 @pytest.mark.live
 @pytest.mark.slow
 def test_position_clamped_to_limits():
-    """Command outside soft limits — reported position must clamp, not exceed."""
+    """Command outside soft limits -- reported position must clamp, not exceed."""
     with _connect() as s:
         send(s, "L 85.0 95.0 25.0 35.0")
         recv(s)

@@ -2,7 +2,7 @@
 Faithful in-process stub of the Polar Pilot rotctld TCP server.
 
 Mirrors the firmware's dispatch table so protocol tests can run without
-hardware.  State is plain Python — mutate it directly in test fixtures.
+hardware.  State is plain Python -- mutate it directly in test fixtures.
 """
 
 import socket
@@ -110,7 +110,7 @@ def _dispatch(line: str, state: RotatorState) -> str | None:
         state.el = 0.0
         return "RPRT 0\n"
 
-    # ── send_cmd (stub — not implemented) ────────────────────────────────────
+    # ── send_cmd (stub -- not implemented) ────────────────────────────────────
     if line.startswith("w ") or line.startswith(r"\send_cmd "):
         return "RPRT -1\n"
 

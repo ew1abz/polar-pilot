@@ -7,10 +7,10 @@ rustup target add thumbv7em-none-eabihf
 cargo install probe-rs-tools       # only needed for flashing
 ```
 
-Python 3.10+ and `pytest` are required for the protocol test suite:
+Python 3.10+ is required for the protocol test suite:
 
 ```bash
-pip install pytest pytest-timeout
+python3 -m pip install pytest pytest-timeout
 ```
 
 ## Build
@@ -59,8 +59,8 @@ physics.
 ### Running Protocol Tests (Stub)
 
 ```bash
-pytest                         # uses pytest.ini defaults (excludes live tests)
-pytest tests/test_protocol.py  # explicit
+python3 -m pytest                         # uses pytest.ini defaults (excludes live tests)
+python3 -m pytest tests/test_protocol.py  # explicit
 ```
 
 52 tests covering all commands, argument errors, protocol robustness
@@ -72,7 +72,7 @@ Set `ROTATOR_HOST` to the device's IP address (DHCP-assigned or static fallback
 `192.168.1.200`):
 
 ```bash
-ROTATOR_HOST=192.168.1.42 pytest tests/ --timeout=60
+ROTATOR_HOST=192.168.1.42 python3 -m pytest tests/ --timeout=60
 ```
 
 Live tests cover DHCP/TCP connectivity, motor convergence to target, stop

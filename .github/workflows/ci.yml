@@ -42,7 +42,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install test dependencies
-        run: pip install pytest pytest-timeout
+        run: python3 -m pip install pytest pytest-timeout
 
       - name: Run protocol tests
-        run: pytest --timeout=10 -v
+        run: python3 -m pytest --timeout=10 -v

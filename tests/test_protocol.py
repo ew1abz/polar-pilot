@@ -2,7 +2,7 @@
 Protocol tests for the Polar Pilot rotctld TCP server.
 
 Run against the in-process stub by default.  All tests are stateless at
-the TCP level — state is set up directly on stub_server.state before
+the TCP level -- state is set up directly on stub_server.state before
 sending commands, so there is no sleeping or sequencing on motor timing.
 """
 
@@ -355,7 +355,7 @@ class TestProtocolRobustness:
         s, _ = conn_stub
         s.sendall(b"w " + b"A" * 300 + b"\n")
         time.sleep(0.05)
-        # stub closes or returns an error — either is acceptable
+        # stub closes or returns an error -- either is acceptable
         s.settimeout(1.0)
         r = s.recv(256).decode()
         assert "RPRT" in r or r == ""
