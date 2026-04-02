@@ -106,8 +106,19 @@ def _dispatch(line: str, state: RotatorState) -> str | None:
     if line in ("R", r"\reset") or line.startswith("R ") or line.startswith(r"\reset "):
         if (r := fault_guard()):
             return r
-        state.az = 0.0
-        state.el = 0.0
+        rtype = ""
+        if line.startswith("R "):
+            rtype = line[2:].strip()
+        elif line.startswith(r"\reset "):
+            rtype = line[7:].strip()
+        if rtype == "2":
+            # R 2 = re-home: stub parks to 0/0 (no real endstop search)
+            state.az = 0.0
+            state.el = 0.0
+        else:
+            # R / R 0 / R 1 = park at 0/0
+            state.az = 0.0
+            state.el = 0.0
         return "RPRT 0\n"
 
     # ── send_cmd (stub -- not implemented) ────────────────────────────────────

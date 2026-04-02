@@ -319,6 +319,15 @@ def test_multiple_sequential_queries(ser):
 
 @pytest.mark.live
 @pytest.mark.slow
+def test_rh_rehomes(ser):
+    """RH triggers the full endstop homing sequence."""
+    send(ser, "RH")
+    # During homing the phase is Homing; wait until position settles at 0/0.
+    poll_until(ser, 0.0, 0.0, timeout=120.0)
+
+
+@pytest.mark.live
+@pytest.mark.slow
 def test_rs_parks_to_zero(ser):
     """RS parks both axes to 0/0."""
     send(ser, "RS")

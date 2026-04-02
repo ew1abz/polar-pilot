@@ -41,6 +41,8 @@ impl Default for RotatorState {
 pub enum RotatorCmd {
     GoTo { az: f32, el: f32 },
     Stop,
+    /// Re-run the full endstop homing sequence.
+    Home,
 }
 
 /// Operator-configurable soft travel limits.  Defaults span the full range.

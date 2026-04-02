@@ -64,8 +64,11 @@ pub async fn easycom_task(
                         _ => { warn!("EasyComm: bad LM args"); }
                     }
                 } else if line == b"RS" {
-                    // Park to 0/0 (parity with rotctld R command)
+                    // Park to 0/0 (parity with rotctld R / R 0 / R 1)
                     CMD.send(RotatorCmd::GoTo { az: 0.0, el: 0.0 }).await;
+                } else if line == b"RH" {
+                    // Re-home: full endstop homing sequence (parity with rotctld R 2)
+                    CMD.send(RotatorCmd::Home).await;
                 } else if line == b"?" {
                     let _ = usart_tx.write(b"\r").await;
                 } else if line == b"C" {

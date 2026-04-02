@@ -156,7 +156,8 @@ Line endings: CR, LF, or CR+LF are all accepted.
 | `LM`                                      | EasyComm  | Get soft limits          | `LM az_min az_max el_min el_max\n` |
 | `LM <az_min> <az_max> <el_min> <el_max>`  | EasyComm  | Set soft limits          | (none)                             |
 | `VE`                                      | EasyComm  | Version query            | `Polar Pilot v<ver>\n`             |
-| `RS`                                      | EasyComm  | Reset / park to 0/0      | (none)                             |
+| `RS`                                      | EasyComm  | Park to 0/0 (no homing)  | (none)                             |
+| `RH`                                      | EasyComm  | Re-home (endstop search) | (none)                             |
 | `C`                                       | GS-232    | Query position           | `AZ<az> EL<el>\n`                  |
 | `A<NNN>`                                  | GS-232    | Set azimuth only         | (none)                             |
 | `E<NNN>`                                  | GS-232    | Set elevation only       | (none)                             |

@@ -124,8 +124,16 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                     if let Phase::Fault(msg) = state.phase {
                         let _ = core::write!(resp, "FAULT: {}\nRPRT -9\n", msg);
                     } else {
-                        // Any reset type: stop motion and park at 0°/0°
-                        CMD.send(RotatorCmd::GoTo { az: 0.0, el: 0.0 }).await;
+                        let rtype = if line.starts_with("R ") { line[2..].trim() }
+                                    else if line.starts_with("\\reset ") { line[7..].trim() }
+                                    else { "" };
+                        if rtype == "2" {
+                            // R 2 = re-home (endstop search)
+                            CMD.send(RotatorCmd::Home).await;
+                        } else {
+                            // R / R 0 / R 1 = park at 0°/0°
+                            CMD.send(RotatorCmd::GoTo { az: 0.0, el: 0.0 }).await;
+                        }
                         let _ = core::write!(resp, "RPRT 0\n");
                     }
                 } else if line.starts_with("w ") || line.starts_with("\\send_cmd ") {

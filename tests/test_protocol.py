@@ -195,6 +195,16 @@ class TestReset:
         assert float(lines[0]) == pytest.approx(0.0)
         assert float(lines[1]) == pytest.approx(0.0)
 
+    def test_r2_rehome_returns_rprt0(self, conn_stub):
+        s, _ = conn_stub
+        send(s, "R 2")
+        assert recv(s) == "RPRT 0\n"
+
+    def test_r2_long_form(self, conn_stub):
+        s, _ = conn_stub
+        send(s, r"\reset 2")
+        assert recv(s) == "RPRT 0\n"
+
 
 # ── send_cmd ──────────────────────────────────────────────────────────────────
 

@@ -45,11 +45,6 @@ pub async fn motor_task(
     el_pwm.ch1().set_duty_cycle(max_el / 2);
     el_pwm.ch1().disable();
 
-    let mut target_az: f32 = 0.0;
-    let mut target_el: f32 = 0.0;
-    let mut current_az: f32 = 0.0;
-    let mut current_el: f32 = 0.0;
-
     let state_tx = STATE.sender();
     info!("motor_task: running");
 
@@ -60,114 +55,124 @@ pub async fn motor_task(
     const MAX_AZ_HOME_MS: u64 = 95_000; // 380° ÷ ~4°/s
     const MAX_EL_HOME_MS: u64 = 28_000; // 100° ÷ ~4°/s
 
-    motor_en.set_low();
-
-    // ── AZ homing ───────────────────────────────────────────────
-    info!("motor: homing AZ");
-
-    // Pre-check: if already on endstop, back off until it releases.
-    if az_home.is_low() {
-        info!("motor: AZ on endstop at startup, backing off");
-        az_dir.set_high();
-        az_pwm.ch1().enable();
-        let result = with_timeout(BACKOFF_TIMEOUT, async {
-            loop {
-                if az_home.is_high() { return; }
-                Timer::after(MOTOR_TICK).await;
-            }
-        }).await;
-        az_pwm.ch1().disable();
-        if result.is_err() || az_home.is_low() {
-            motor_en.set_high();
-            error!("motor: AZ endstop stuck — halting");
-            state_tx.send(RotatorState { phase: Phase::Fault("AZ endstop stuck"), ..Default::default() });
-            loop { Timer::after_secs(60).await; }
-        }
-    }
-
-    // Approach home.
-    az_dir.set_low();
-    az_pwm.ch1().enable();
-    let deadline = Instant::now() + Duration::from_millis(MAX_AZ_HOME_MS);
+    // Outer loop: re-entered each time a Home command is received.
     loop {
+        // Drain any pending commands so stale GoTo/Stop don't interfere.
+        while CMD.try_receive().is_ok() {}
+
+        motor_en.set_low();
+
+        let mut target_az: f32 = 0.0;
+        let mut target_el: f32 = 0.0;
+        let mut current_az: f32 = 0.0;
+        let mut current_el: f32 = 0.0;
+
+        // ── AZ homing ───────────────────────────────────────────────
+        info!("motor: homing AZ");
+
+        // Pre-check: if already on endstop, back off until it releases.
         if az_home.is_low() {
+            info!("motor: AZ on endstop, backing off");
+            az_dir.set_high();
+            az_pwm.ch1().enable();
+            let result = with_timeout(BACKOFF_TIMEOUT, async {
+                loop {
+                    if az_home.is_high() { return; }
+                    Timer::after(MOTOR_TICK).await;
+                }
+            }).await;
             az_pwm.ch1().disable();
-            current_az = 0.0;
-            target_az  = 0.0;
-            info!("motor: AZ homed");
-            break;
-        }
-        if Instant::now() > deadline {
-            az_pwm.ch1().disable();
-            motor_en.set_high();
-            error!("motor: AZ travel limit exceeded — halting");
-            state_tx.send(RotatorState { phase: Phase::Fault("AZ travel limit"), ..Default::default() });
-            loop { Timer::after_secs(60).await; }
-        }
-        state_tx.send(RotatorState {
-            target_az, target_el, current_az, current_el,
-            moving: true, link_up: false, phase: Phase::Homing,
-        });
-        Timer::after(MOTOR_TICK).await;
-    }
-
-    // ── EL homing ───────────────────────────────────────────────
-    info!("motor: homing EL");
-
-    if el_home.is_low() {
-        info!("motor: EL on endstop at startup, backing off");
-        el_dir.set_high();
-        el_pwm.ch1().enable();
-        let result = with_timeout(BACKOFF_TIMEOUT, async {
-            loop {
-                if el_home.is_high() { return; }
-                Timer::after(MOTOR_TICK).await;
+            if result.is_err() || az_home.is_low() {
+                motor_en.set_high();
+                error!("motor: AZ endstop stuck -- halting");
+                state_tx.send(RotatorState { phase: Phase::Fault("AZ endstop stuck"), ..Default::default() });
+                loop { Timer::after_secs(60).await; }
             }
-        }).await;
-        el_pwm.ch1().disable();
-        if result.is_err() || el_home.is_low() {
-            motor_en.set_high();
-            error!("motor: EL endstop stuck — halting");
-            state_tx.send(RotatorState { phase: Phase::Fault("EL endstop stuck"), ..Default::default() });
-            loop { Timer::after_secs(60).await; }
         }
-    }
 
-    el_dir.set_low();
-    el_pwm.ch1().enable();
-    let deadline = Instant::now() + Duration::from_millis(MAX_EL_HOME_MS);
-    loop {
+        // Approach home.
+        az_dir.set_low();
+        az_pwm.ch1().enable();
+        let deadline = Instant::now() + Duration::from_millis(MAX_AZ_HOME_MS);
+        loop {
+            if az_home.is_low() {
+                az_pwm.ch1().disable();
+                current_az = 0.0;
+                target_az  = 0.0;
+                info!("motor: AZ homed");
+                break;
+            }
+            if Instant::now() > deadline {
+                az_pwm.ch1().disable();
+                motor_en.set_high();
+                error!("motor: AZ travel limit exceeded -- halting");
+                state_tx.send(RotatorState { phase: Phase::Fault("AZ travel limit"), ..Default::default() });
+                loop { Timer::after_secs(60).await; }
+            }
+            state_tx.send(RotatorState {
+                target_az, target_el, current_az, current_el,
+                moving: true, link_up: false, phase: Phase::Homing,
+            });
+            Timer::after(MOTOR_TICK).await;
+        }
+
+        // ── EL homing ───────────────────────────────────────────────
+        info!("motor: homing EL");
+
         if el_home.is_low() {
+            info!("motor: EL on endstop, backing off");
+            el_dir.set_high();
+            el_pwm.ch1().enable();
+            let result = with_timeout(BACKOFF_TIMEOUT, async {
+                loop {
+                    if el_home.is_high() { return; }
+                    Timer::after(MOTOR_TICK).await;
+                }
+            }).await;
             el_pwm.ch1().disable();
-            current_el = 0.0;
-            target_el  = 0.0;
-            info!("motor: EL homed");
-            break;
+            if result.is_err() || el_home.is_low() {
+                motor_en.set_high();
+                error!("motor: EL endstop stuck -- halting");
+                state_tx.send(RotatorState { phase: Phase::Fault("EL endstop stuck"), ..Default::default() });
+                loop { Timer::after_secs(60).await; }
+            }
         }
-        if Instant::now() > deadline {
-            el_pwm.ch1().disable();
-            motor_en.set_high();
-            error!("motor: EL travel limit exceeded — halting");
-            state_tx.send(RotatorState { phase: Phase::Fault("EL travel limit"), ..Default::default() });
-            loop { Timer::after_secs(60).await; }
+
+        el_dir.set_low();
+        el_pwm.ch1().enable();
+        let deadline = Instant::now() + Duration::from_millis(MAX_EL_HOME_MS);
+        loop {
+            if el_home.is_low() {
+                el_pwm.ch1().disable();
+                current_el = 0.0;
+                target_el  = 0.0;
+                info!("motor: EL homed");
+                break;
+            }
+            if Instant::now() > deadline {
+                el_pwm.ch1().disable();
+                motor_en.set_high();
+                error!("motor: EL travel limit exceeded -- halting");
+                state_tx.send(RotatorState { phase: Phase::Fault("EL travel limit"), ..Default::default() });
+                loop { Timer::after_secs(60).await; }
+            }
+            state_tx.send(RotatorState {
+                target_az, target_el, current_az, current_el,
+                moving: true, link_up: false, phase: Phase::Homing,
+            });
+            Timer::after(MOTOR_TICK).await;
         }
-        state_tx.send(RotatorState {
-            target_az, target_el, current_az, current_el,
-            moving: true, link_up: false, phase: Phase::Homing,
-        });
-        Timer::after(MOTOR_TICK).await;
-    }
 
-    motor_en.set_high();
-    info!("motor: homing done");
+        motor_en.set_high();
+        info!("motor: homing done");
 
-    let mut last_tick = Instant::now();
-    // Sub-step fractional accumulators: carry forward the unissued fraction of a
-    // step between loop iterations so no pulses are lost to truncation.
-    let mut az_frac: f32 = 0.0;
-    let mut el_frac: f32 = 0.0;
+        let mut last_tick = Instant::now();
+        // Sub-step fractional accumulators: carry forward the unissued fraction of a
+        // step between loop iterations so no pulses are lost to truncation.
+        let mut az_frac: f32 = 0.0;
+        let mut el_frac: f32 = 0.0;
 
-    loop {
+        'running: loop {
         match embassy_time::with_timeout(MOTOR_TICK, CMD.receive()).await {
             Ok(cmd) => match cmd {
                 RotatorCmd::GoTo { az, el } => {
@@ -180,6 +185,13 @@ pub async fn motor_task(
                     info!("motor: Stop");
                     target_az = current_az;
                     target_el = current_el;
+                }
+                RotatorCmd::Home => {
+                    info!("motor: re-homing requested");
+                    az_pwm.ch1().disable();
+                    el_pwm.ch1().disable();
+                    motor_en.set_high();
+                    break 'running;
                 }
             },
             Err(_) => {} // timeout — run periodic update
@@ -280,5 +292,6 @@ pub async fn motor_task(
             link_up: false,
             phase: Phase::Running,
         });
-    }
+        } // end 'running loop
+    } // end outer homing loop
 }
