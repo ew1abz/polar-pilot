@@ -128,6 +128,8 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                         CMD.send(RotatorCmd::GoTo { az: 0.0, el: 0.0 }).await;
                         let _ = core::write!(resp, "RPRT 0\n");
                     }
+                } else if line.starts_with("w ") || line.starts_with("\\send_cmd ") {
+                    let _ = core::write!(resp, "RPRT -1\n");
                 } else if line == "q" || line == "\\quit" {
                     break 'conn;
                 } else if line == "_" || line == "\\get_info" {
