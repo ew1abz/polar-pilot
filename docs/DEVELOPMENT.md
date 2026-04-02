@@ -72,15 +72,22 @@ python3 -m pytest tests/test_protocol.py  # explicit
 Set `ROTATOR_HOST` to the device's IP address (DHCP-assigned or static fallback
 `192.168.1.200`):
 
+The default `pytest.ini` excludes live tests with `-m "not live"`.  Pass
+`-m live` (or `-m "live or slow"` to include motor-movement tests) to
+override it:
+
 ```bash
 # rotctld (TCP)
-ROTATOR_HOST=192.168.1.42 python3 -m pytest tests/test_live.py -v --timeout=60
+ROTATOR_HOST=192.168.1.42 python3 -m pytest tests/test_live.py -v --timeout=60 -m live
 
 # EasyComm II (serial) -- requires pyserial and a USB-serial adapter on USART2
-ROTATOR_PORT=/dev/ttyUSB0 python3 -m pytest tests/test_easycom.py -v --timeout=60
+ROTATOR_PORT=/dev/ttyUSB0 python3 -m pytest tests/test_easycom.py -v --timeout=60 -m live
+
+# Include slow motor-movement tests
+ROTATOR_HOST=192.168.1.42 python3 -m pytest tests/test_live.py -v --timeout=60 -m "live or slow"
 
 # Both together
-ROTATOR_HOST=192.168.1.42 ROTATOR_PORT=/dev/ttyUSB0 python3 -m pytest tests/ -v --timeout=60
+ROTATOR_HOST=192.168.1.42 ROTATOR_PORT=/dev/ttyUSB0 python3 -m pytest tests/ -v --timeout=60 -m "live or slow"
 ```
 
 Live tests cover DHCP/TCP connectivity, motor convergence to target, stop
