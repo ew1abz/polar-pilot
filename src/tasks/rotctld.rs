@@ -142,7 +142,9 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                         "0\nrot_model=0\nmin_az={:.1}\nmax_az={:.1}\nmin_el={:.1}\nmax_el={:.1}\n0\n0\n",
                         lim.az_min, lim.az_max, lim.el_min, lim.el_max);
                 } else {
-                    let _ = core::write!(resp, "RPRT -1\n");
+                    // RIG_ENIMPL (-8): command recognised by Hamlib but not
+                    // implemented in this backend.
+                    let _ = core::write!(resp, "RPRT -8\n");
                 }
 
                 if !resp.is_empty() {
