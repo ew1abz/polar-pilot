@@ -318,6 +318,14 @@ def test_multiple_sequential_queries(ser):
 
 
 @pytest.mark.live
+@pytest.mark.slow
+def test_rs_parks_to_zero(ser):
+    """RS parks both axes to 0/0."""
+    send(ser, "RS")
+    poll_until(ser, 0.0, 0.0)
+
+
+@pytest.mark.live
 def test_unknown_command_produces_no_response(ser):
     """Unknown commands are silently ignored (firmware only warns via RTT)."""
     send(ser, "BOGUS")

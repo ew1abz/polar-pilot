@@ -146,14 +146,22 @@ max_el=<el_max>
 
 ## EasyComm II Protocol
 
-| Command                           | Description                        | Response                          |
-|-----------------------------------|------------------------------------|-----------------------------------|
-| `AZ`                              | Query position                     | `AZ<az> EL<el>\n`                 |
-| `AZ<az> EL<el>`                   | Set position                       | (none)                            |
-| `SA` / `SE` / `SA SE`             | Stop                               | (none)                            |
-| `LM`                              | Get soft limits                    | `LM az_min az_max el_min el_max\n`|
-| `LM <az_min> <az_max> <el_min> <el_max>` | Set soft limits           | (none)                            |
-| `VE`                              | Version query                      | `Polar Pilot v0.1\n`              |
+Line endings: CR, LF, or CR+LF are all accepted.
+
+| Command                                   | Standard  | Description              | Response                           |
+|-------------------------------------------|-----------|--------------------------|------------------------------------|
+| `AZ`                                      | EasyComm  | Query position           | `AZ<az> EL<el>\n`                  |
+| `AZ<az> EL<el>`                           | EasyComm  | Set both axes            | (none)                             |
+| `SA` / `SE` / `SA SE`                     | EasyComm  | Stop AZ / EL / both      | (none)                             |
+| `LM`                                      | EasyComm  | Get soft limits          | `LM az_min az_max el_min el_max\n` |
+| `LM <az_min> <az_max> <el_min> <el_max>`  | EasyComm  | Set soft limits          | (none)                             |
+| `VE`                                      | EasyComm  | Version query            | `Polar Pilot v<ver>\n`             |
+| `RS`                                      | EasyComm  | Reset / park to 0/0      | (none)                             |
+| `C`                                       | GS-232    | Query position           | `AZ<az> EL<el>\n`                  |
+| `A<NNN>`                                  | GS-232    | Set azimuth only         | (none)                             |
+| `E<NNN>`                                  | GS-232    | Set elevation only       | (none)                             |
+| `W <az> <el>`                             | GS-232B   | Set both axes            | (none)                             |
+| `?`                                       | --        | Keep-alive               | `\r`                               |
 
 ## Development
 
