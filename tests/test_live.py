@@ -24,8 +24,20 @@ def _host() -> str:
     return h
 
 
-def _connect(timeout: float = 10.0) -> socket.socket:
-    return socket.create_connection((_host(), 4533), timeout=timeout)
+def _connect(timeout: float = 10.0, retries: int = 20, retry_delay: float = 0.05) -> socket.socket:
+    """Connect to the rotctld port, retrying on ConnectionRefused.
+
+    The firmware cycles through close→accept in ~10-50 ms; a short retry
+    loop avoids false failures when tests run back-to-back faster than the
+    socket recycles.
+    """
+    for attempt in range(retries):
+        try:
+            return socket.create_connection((_host(), 4533), timeout=timeout)
+        except ConnectionRefusedError:
+            if attempt == retries - 1:
+                raise
+            time.sleep(retry_delay)
 
 
 def send(s: socket.socket, cmd: str) -> None:

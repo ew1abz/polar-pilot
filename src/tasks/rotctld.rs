@@ -171,6 +171,6 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
 
         info!("rotctld: client disconnected");
         socket.close();
-        Timer::after_millis(100).await;
+        Timer::after_millis(10).await;
     }
 }
