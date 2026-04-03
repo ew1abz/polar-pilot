@@ -193,34 +193,9 @@ for reference.
 │   ├── MIGRATION_NOTES.md          # comparison with rust-l432-rotator
 │   ├── TODO.md                     # known gaps and planned work
 │   └── EEPROM_EMULATION.md         # (future) persistent configuration
-└── embassy-net-wiznet-patch/       # local W5500 driver patches
 ```
 
 ## Known Issues & Workarounds
-
-### SPI CLK Hi-Z Between DMA Operations (embassy-stm32 0.6.0)
-
-The `embassy-stm32` v0.6.0 SPI driver disables the SPI peripheral (`SPE=0`)
-between DMA operations within a single `SpiDevice::transaction()`. On STM32L4,
-this causes the SCK pin to go hi-Z, corrupting W5500 communication.
-
-**Symptoms**: PHYCFGR reads incorrect values, `is_link_up()` returns false,
-DHCP never completes, integer underflow panic in `read_frame()`.
-
-**Hardware workaround**: Add a **pull-down resistor on SCK (PA5)** to hold it
-low during hi-Z gaps. This keeps the clock at the correct idle level (CPOL=0)
-and prevents the W5500 from seeing spurious clock edges.
-
-**Software patches** (in `embassy-net-wiznet-patch/`):
-
-- Combined the 3-byte SPI header into a single `Operation::Write` (reduces
-  operation boundaries from 2 to 1).
-- Added bounds check in `read_frame()` to guard against integer underflow
-  when a corrupted frame header reports size < 2.
-- Removed redundant software reset (`MR=0x80`) which clears PHYCFGR bit 7
-  and breaks link detection after the hardware reset already ran.
-
-See `embassy-spi-bug-report` branch for upstream bug reports.
 
 ### STM32L432 Fixed DMA Channel Mapping
 

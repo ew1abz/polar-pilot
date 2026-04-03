@@ -115,14 +115,6 @@ together). See `docs/SPEC.md` for details.
 - `libm` is required for `sinf`/`cosf` in the OLED polar display
   (no hardware FPU trig)
 
-## Known Hardware Workaround
-
-The embassy-stm32 v0.6.0 SPI driver goes hi-Z on SCK between DMA
-operations, corrupting W5500 communication. A **pull-down resistor
-on SCK (PA5)** is required. Software patches in
-`embassy-net-wiznet-patch/` merge the SPI header into a single
-write operation. See `docs/SPEC.md` "Known Issues" for details.
-
 ## Cargo Features
 
 - `test-spi` — enables a loop reading the W5500 chip version
