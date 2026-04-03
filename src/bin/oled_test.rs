@@ -85,17 +85,20 @@ async fn main(_spawner: Spawner) -> ! {
         display.clear_buffer();
 
         // Title
-        let _ = Text::new("Polar Pilot", Point::new(16, 10), style)
-            .draw(&mut display);
+        let _ = Text::new("Polar Pilot", Point::new(16, 10), style).draw(&mut display);
 
         // Counter
         buf.clear();
         core::write!(buf, "Count: {}", counter).unwrap();
-        let _ = Text::new(&buf, Point::new(16, 30), style)
-            .draw(&mut display);
+        let _ = Text::new(&buf, Point::new(16, 30), style).draw(&mut display);
 
         // Spinning dot — cycles through 4 positions
-        let positions = [Point::new(100, 45), Point::new(110, 45), Point::new(110, 55), Point::new(100, 55)];
+        let positions = [
+            Point::new(100, 45),
+            Point::new(110, 45),
+            Point::new(110, 55),
+            Point::new(100, 55),
+        ];
         let pos = positions[(counter as usize) % 4];
         let _ = Circle::new(pos, 6)
             .into_styled(PrimitiveStyle::with_fill(BinaryColor::On))

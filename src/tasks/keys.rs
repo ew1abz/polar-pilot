@@ -20,7 +20,10 @@ pub async fn key_task(
 
     impl BtnState {
         const fn new() -> Self {
-            Self { raw_count: 0, pressed: false }
+            Self {
+                raw_count: 0,
+                pressed: false,
+            }
         }
 
         // Returns true on a press or release edge.
@@ -77,12 +80,20 @@ pub async fn key_task(
         let jogging = up.pressed || down.pressed || right.pressed || left.pressed;
 
         if jogging {
-            let az = if up.pressed        {  9999.0 }
-                     else if down.pressed { -9999.0 }
-                     else                 { state.current_az };
-            let el = if right.pressed     {  9999.0 }
-                     else if left.pressed { -9999.0 }
-                     else                 { state.current_el };
+            let az = if up.pressed {
+                9999.0
+            } else if down.pressed {
+                -9999.0
+            } else {
+                state.current_az
+            };
+            let el = if right.pressed {
+                9999.0
+            } else if left.pressed {
+                -9999.0
+            } else {
+                state.current_el
+            };
             CMD.send(RotatorCmd::GoTo { az, el }).await;
         } else if was_jogging {
             CMD.send(RotatorCmd::Stop).await;

@@ -48,17 +48,15 @@ async fn main(_spawner: Spawner) -> ! {
 
     // ── Hardware reset ────────────────────────────────────────────
     let mut w5500_rst = Output::new(p.PA1, Level::Low, Speed::Low);
-    Timer::after_millis(1).await;   // hold RST low ≥500 µs per datasheet
+    Timer::after_millis(1).await; // hold RST low ≥500 µs per datasheet
     w5500_rst.set_high();
-    Timer::after_millis(2).await;   // PLL lock after reset release
+    Timer::after_millis(2).await; // PLL lock after reset release
 
     // ── SPI1 init ─────────────────────────────────────────────────
     let mut spi_cfg = spi::Config::default();
     spi_cfg.frequency = Hertz(1_000_000);
     let mut spi = Spi::new(
-        p.SPI1, p.PA5, p.PA7, p.PA6,
-        p.DMA1_CH3, p.DMA1_CH2,
-        Irqs, spi_cfg,
+        p.SPI1, p.PA5, p.PA7, p.PA6, p.DMA1_CH3, p.DMA1_CH2, Irqs, spi_cfg,
     );
     let mut cs = Output::new(p.PA4, Level::High, Speed::VeryHigh);
 
@@ -76,12 +74,18 @@ async fn main(_spawner: Spawner) -> ! {
 
         attempts += 1;
         if attempts % 100 == 0 {
-            warn!("Still waiting for W5500... (attempt {}, got {:#x})", attempts, ver[0]);
+            warn!(
+                "Still waiting for W5500... (attempt {}, got {:#x})",
+                attempts, ver[0]
+            );
         }
         Timer::after_millis(2).await;
     }
 
-    info!("W5500 detected (VERSIONR = {:#x}) after {} attempts", ver[0], attempts);
+    info!(
+        "W5500 detected (VERSIONR = {:#x}) after {} attempts",
+        ver[0], attempts
+    );
 
     // ── Success: blink LED ────────────────────────────────────────
     let mut ticker = Ticker::every(Duration::from_millis(200));

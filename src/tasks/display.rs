@@ -78,13 +78,23 @@ pub async fn display_task(
 
     // Airplane pixel offsets: cross arms + 3×3 filled centre
     const PLANE: [(i32, i32); 17] = [
-                          (0, -3), (0, -2),
-        (-3, 0), (-2, 0),
-        (-1, -1), (0, -1), (1, -1),
-        (-1,  0), (0,  0), (1,  0),
-        (-1,  1), (0,  1), (1,  1),
-                   (2, 0), (3, 0),
-                          (0,  2), (0,  3),
+        (0, -3),
+        (0, -2),
+        (-3, 0),
+        (-2, 0),
+        (-1, -1),
+        (0, -1),
+        (1, -1),
+        (-1, 0),
+        (0, 0),
+        (1, 0),
+        (-1, 1),
+        (0, 1),
+        (1, 1),
+        (2, 0),
+        (3, 0),
+        (0, 2),
+        (0, 3),
     ];
 
     let mut ticker = Ticker::every(Duration::from_millis(250));
@@ -102,10 +112,10 @@ pub async fn display_task(
 
         // ── Fault screen ────────────────────────────────────────
         if let Phase::Fault(msg) = state.phase {
-            let _ = Text::new("FAULT",        Point::new(0,  12), text_style).draw(&mut display);
-            let _ = Text::new(msg,            Point::new(0,  32), text_style).draw(&mut display);
-            let _ = Text::new("Power cycle", Point::new(0,  50), text_style).draw(&mut display);
-            let _ = Text::new("to reset",    Point::new(0,  60), text_style).draw(&mut display);
+            let _ = Text::new("FAULT", Point::new(0, 12), text_style).draw(&mut display);
+            let _ = Text::new(msg, Point::new(0, 32), text_style).draw(&mut display);
+            let _ = Text::new("Power cycle", Point::new(0, 50), text_style).draw(&mut display);
+            let _ = Text::new("to reset", Point::new(0, 60), text_style).draw(&mut display);
             display.flush().ok();
             continue;
         }
@@ -145,8 +155,7 @@ pub async fn display_task(
         let py_i = py as i32;
 
         for &(dx, dy) in &PLANE {
-            let _ = Pixel(Point::new(px_i + dx, py_i + dy), BinaryColor::On)
-                .draw(&mut display);
+            let _ = Pixel(Point::new(px_i + dx, py_i + dy), BinaryColor::On).draw(&mut display);
         }
 
         // AZ / EL readout
