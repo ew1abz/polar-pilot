@@ -46,8 +46,14 @@ pub async fn easycom_task(
                     // Get soft limits
                     let lim = LIMITS.lock(|c| c.get());
                     let mut resp = heapless::String::<64>::new();
-                    let _ = core::write!(resp, "LM {:.1} {:.1} {:.1} {:.1}\n",
-                        lim.az_min, lim.az_max, lim.el_min, lim.el_max);
+                    let _ = core::write!(
+                        resp,
+                        "LM {:.1} {:.1} {:.1} {:.1}\n",
+                        lim.az_min,
+                        lim.az_max,
+                        lim.el_min,
+                        lim.el_max
+                    );
                     let _ = usart_tx.write(resp.as_bytes()).await;
                 } else if line.starts_with(b"LM ") {
                     // Set soft limits: "LM az_min az_max el_min el_max"
@@ -59,13 +65,22 @@ pub async fn easycom_task(
                     let el_max = parts.next().and_then(parse_f32_bytes);
                     match (az_min, az_max, el_min, el_max) {
                         (Some(az_min), Some(az_max), Some(el_min), Some(el_max)) => {
-                            LIMITS.lock(|c| c.set(SoftLimits { az_min, az_max, el_min, el_max }));
+                            LIMITS.lock(|c| {
+                                c.set(SoftLimits {
+                                    az_min,
+                                    az_max,
+                                    el_min,
+                                    el_max,
+                                })
+                            });
                         }
-                        _ => { warn!("EasyComm: bad LM args"); }
+                        _ => {
+                            warn!("EasyComm: bad LM args");
+                        }
                     }
                 } else if line == b"RS" {
                     // Park to 0/0 (parity with rotctld R / R 0 / R 1)
-                    CMD.send(RotatorCmd::GoTo { az: 0.0, el: 0.0 }).await;
+                    CMD.send(RotatorCmd::Park).await;
                 } else if line == b"RH" {
                     // Re-home: full endstop homing sequence (parity with rotctld R 2)
                     CMD.send(RotatorCmd::Home).await;
@@ -74,14 +89,22 @@ pub async fn easycom_task(
                 } else if line == b"C" {
                     let state = STATE.try_get().unwrap_or_default();
                     let mut resp = heapless::String::<40>::new();
-                    let _ = core::write!(resp, "AZ{:.1} EL{:.1}\n",
-                        state.current_az, state.current_el);
+                    let _ = core::write!(
+                        resp,
+                        "AZ{:.1} EL{:.1}\n",
+                        state.current_az,
+                        state.current_el
+                    );
                     let _ = usart_tx.write(resp.as_bytes()).await;
                 } else if line.len() > 1 && line[0] == b'A' && line[1] != b'Z' {
                     // GS-232: A<NNN> — set azimuth only
                     if let Some(az) = parse_f32_bytes(&line[1..]) {
                         let state = STATE.try_get().unwrap_or_default();
-                        CMD.send(RotatorCmd::GoTo { az, el: state.target_el }).await;
+                        CMD.send(RotatorCmd::GoTo {
+                            az,
+                            el: state.target_el,
+                        })
+                        .await;
                     } else {
                         warn!("EasyComm: bad A arg");
                     }
@@ -89,7 +112,11 @@ pub async fn easycom_task(
                     // GS-232: E<NNN> — set elevation only
                     if let Some(el) = parse_f32_bytes(&line[1..]) {
                         let state = STATE.try_get().unwrap_or_default();
-                        CMD.send(RotatorCmd::GoTo { az: state.target_az, el }).await;
+                        CMD.send(RotatorCmd::GoTo {
+                            az: state.target_az,
+                            el,
+                        })
+                        .await;
                     } else {
                         warn!("EasyComm: bad E arg");
                     }
@@ -98,7 +125,10 @@ pub async fn easycom_task(
                     let args = &line[2..];
                     let sp = args.iter().position(|&b| b == b' ');
                     if let Some(sp) = sp {
-                        match (parse_f32_bytes(&args[..sp]), parse_f32_bytes(&args[sp + 1..])) {
+                        match (
+                            parse_f32_bytes(&args[..sp]),
+                            parse_f32_bytes(&args[sp + 1..]),
+                        ) {
                             (Some(az), Some(el)) => CMD.send(RotatorCmd::GoTo { az, el }).await,
                             _ => warn!("EasyComm: bad W args"),
                         }
@@ -117,8 +147,10 @@ pub async fn easycom_task(
                             let state = STATE.try_get().unwrap_or_default();
                             let mut resp = heapless::String::<40>::new();
                             let _ = core::write!(
-                                resp, "AZ{:.1} EL{:.1}\n",
-                                state.current_az, state.current_el,
+                                resp,
+                                "AZ{:.1} EL{:.1}\n",
+                                state.current_az,
+                                state.current_el,
                             );
                             let _ = usart_tx.write(resp.as_bytes()).await;
                         } else {

@@ -109,6 +109,8 @@ per-task peripheral assignments. Summary:
 The device implements a subset of the rotctld text protocol. Each command is
 a single line terminated by `\n`. Responses are also newline-terminated.
 
+Up to **2 concurrent TCP clients** are supported simultaneously on port 4533.
+
 ### Supported Commands
 
 | Command                        | Alias              | Description              | Response                     |

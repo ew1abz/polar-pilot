@@ -49,6 +49,7 @@ embassy-net = { version = "0.9", features = [
     "tcp",
     "dhcpv4",
     "medium-ethernet",
+    "auto-icmp-echo-reply",
 ] }
 
 # ── W5500 Ethernet driver ────────────────────────────────────────

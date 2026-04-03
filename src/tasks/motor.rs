@@ -2,7 +2,7 @@ use defmt::*;
 use embassy_stm32::gpio::{Input, Output};
 use embassy_stm32::time::Hertz;
 use embassy_stm32::timer::simple_pwm::SimplePwm;
-use embassy_time::{Duration, Instant, Timer, with_timeout};
+use embassy_time::{with_timeout, Duration, Instant, Timer};
 
 use crate::types::{Phase, RotatorCmd, RotatorState, CMD, LIMITS, STATE};
 
@@ -77,16 +77,24 @@ pub async fn motor_task(
             az_pwm.ch1().enable();
             let result = with_timeout(BACKOFF_TIMEOUT, async {
                 loop {
-                    if az_home.is_high() { return; }
+                    if az_home.is_high() {
+                        return;
+                    }
                     Timer::after(MOTOR_TICK).await;
                 }
-            }).await;
+            })
+            .await;
             az_pwm.ch1().disable();
             if result.is_err() || az_home.is_low() {
                 motor_en.set_high();
                 error!("motor: AZ endstop stuck -- halting");
-                state_tx.send(RotatorState { phase: Phase::Fault("AZ endstop stuck"), ..Default::default() });
-                loop { Timer::after_secs(60).await; }
+                state_tx.send(RotatorState {
+                    phase: Phase::Fault("AZ endstop stuck"),
+                    ..Default::default()
+                });
+                loop {
+                    Timer::after_secs(60).await;
+                }
             }
         }
 
@@ -98,7 +106,7 @@ pub async fn motor_task(
             if az_home.is_low() {
                 az_pwm.ch1().disable();
                 current_az = 0.0;
-                target_az  = 0.0;
+                target_az = 0.0;
                 info!("motor: AZ homed");
                 break;
             }
@@ -106,12 +114,22 @@ pub async fn motor_task(
                 az_pwm.ch1().disable();
                 motor_en.set_high();
                 error!("motor: AZ travel limit exceeded -- halting");
-                state_tx.send(RotatorState { phase: Phase::Fault("AZ travel limit"), ..Default::default() });
-                loop { Timer::after_secs(60).await; }
+                state_tx.send(RotatorState {
+                    phase: Phase::Fault("AZ travel limit"),
+                    ..Default::default()
+                });
+                loop {
+                    Timer::after_secs(60).await;
+                }
             }
             state_tx.send(RotatorState {
-                target_az, target_el, current_az, current_el,
-                moving: true, link_up: false, phase: Phase::Homing,
+                target_az,
+                target_el,
+                current_az,
+                current_el,
+                moving: true,
+                link_up: false,
+                phase: Phase::Homing,
             });
             Timer::after(MOTOR_TICK).await;
         }
@@ -125,16 +143,24 @@ pub async fn motor_task(
             el_pwm.ch1().enable();
             let result = with_timeout(BACKOFF_TIMEOUT, async {
                 loop {
-                    if el_home.is_high() { return; }
+                    if el_home.is_high() {
+                        return;
+                    }
                     Timer::after(MOTOR_TICK).await;
                 }
-            }).await;
+            })
+            .await;
             el_pwm.ch1().disable();
             if result.is_err() || el_home.is_low() {
                 motor_en.set_high();
                 error!("motor: EL endstop stuck -- halting");
-                state_tx.send(RotatorState { phase: Phase::Fault("EL endstop stuck"), ..Default::default() });
-                loop { Timer::after_secs(60).await; }
+                state_tx.send(RotatorState {
+                    phase: Phase::Fault("EL endstop stuck"),
+                    ..Default::default()
+                });
+                loop {
+                    Timer::after_secs(60).await;
+                }
             }
         }
 
@@ -145,7 +171,7 @@ pub async fn motor_task(
             if el_home.is_low() {
                 el_pwm.ch1().disable();
                 current_el = 0.0;
-                target_el  = 0.0;
+                target_el = 0.0;
                 info!("motor: EL homed");
                 break;
             }
@@ -153,12 +179,22 @@ pub async fn motor_task(
                 el_pwm.ch1().disable();
                 motor_en.set_high();
                 error!("motor: EL travel limit exceeded -- halting");
-                state_tx.send(RotatorState { phase: Phase::Fault("EL travel limit"), ..Default::default() });
-                loop { Timer::after_secs(60).await; }
+                state_tx.send(RotatorState {
+                    phase: Phase::Fault("EL travel limit"),
+                    ..Default::default()
+                });
+                loop {
+                    Timer::after_secs(60).await;
+                }
             }
             state_tx.send(RotatorState {
-                target_az, target_el, current_az, current_el,
-                moving: true, link_up: false, phase: Phase::Homing,
+                target_az,
+                target_el,
+                current_az,
+                current_el,
+                moving: true,
+                link_up: false,
+                phase: Phase::Homing,
             });
             Timer::after(MOTOR_TICK).await;
         }
@@ -173,125 +209,135 @@ pub async fn motor_task(
         let mut el_frac: f32 = 0.0;
 
         'running: loop {
-        match embassy_time::with_timeout(MOTOR_TICK, CMD.receive()).await {
-            Ok(cmd) => match cmd {
-                RotatorCmd::GoTo { az, el } => {
-                    let lim = LIMITS.lock(|c| c.get());
-                    target_az = az.clamp(lim.az_min, lim.az_max);
-                    target_el = el.clamp(lim.el_min, lim.el_max);
-                    info!("motor: GoTo az={} el={} (clamped to az={} el={})", az, el, target_az, target_el);
-                }
-                RotatorCmd::Stop => {
-                    info!("motor: Stop");
-                    target_az = current_az;
-                    target_el = current_el;
-                }
-                RotatorCmd::Home => {
-                    info!("motor: re-homing requested");
-                    az_pwm.ch1().disable();
-                    el_pwm.ch1().disable();
-                    motor_en.set_high();
-                    break 'running;
-                }
-            },
-            Err(_) => {} // timeout — run periodic update
-        }
-
-        // Count whole steps the hardware timer issued since the last iteration.
-        // Microsecond resolution prevents the integer-ms truncation error of as_millis().
-        let now = Instant::now();
-        let elapsed_us = (now - last_tick).as_micros() as f32;
-        last_tick = now;
-
-        let az_diff = target_az - current_az;
-        let el_diff = target_el - current_el;
-        let az_moving = az_diff.abs() > POS_EPSILON;
-        let el_moving = el_diff.abs() > POS_EPSILON;
-
-        if az_moving {
-            az_frac += elapsed_us * STEPS_PER_US;
-            let steps = az_frac as u32;
-            az_frac -= steps as f32;
-            let advance = steps as f32 * AZ_DEG_PER_STEP;
-            if az_diff > 0.0 {
-                az_dir.set_high();
-                current_az = (current_az + advance).min(target_az);
-            } else {
-                az_dir.set_low();
-                current_az = (current_az - advance).max(target_az);
+            match embassy_time::with_timeout(MOTOR_TICK, CMD.receive()).await {
+                Ok(cmd) => match cmd {
+                    RotatorCmd::GoTo { az, el } => {
+                        let lim = LIMITS.lock(|c| c.get());
+                        target_az = az.clamp(lim.az_min, lim.az_max);
+                        target_el = el.clamp(lim.el_min, lim.el_max);
+                        info!(
+                            "motor: GoTo az={} el={} (clamped to az={} el={})",
+                            az, el, target_az, target_el
+                        );
+                    }
+                    RotatorCmd::Park => {
+                        target_az = 0.0;
+                        target_el = 0.0;
+                        info!("motor: Park (bypassing soft limits)");
+                    }
+                    RotatorCmd::Stop => {
+                        info!("motor: Stop");
+                        target_az = current_az;
+                        target_el = current_el;
+                    }
+                    RotatorCmd::Home => {
+                        info!("motor: re-homing requested");
+                        az_pwm.ch1().disable();
+                        el_pwm.ch1().disable();
+                        motor_en.set_high();
+                        break 'running;
+                    }
+                },
+                Err(_) => {} // timeout — run periodic update
             }
-            az_pwm.ch1().enable();
-        } else {
-            current_az = target_az;
-            az_frac = 0.0;
-            az_pwm.ch1().disable();
-        }
 
-        if el_moving {
-            el_frac += elapsed_us * STEPS_PER_US;
-            let steps = el_frac as u32;
-            el_frac -= steps as f32;
-            let advance = steps as f32 * EL_DEG_PER_STEP;
-            if el_diff > 0.0 {
-                el_dir.set_high();
-                current_el = (current_el + advance).min(target_el);
+            // Count whole steps the hardware timer issued since the last iteration.
+            // Microsecond resolution prevents the integer-ms truncation error of as_millis().
+            let now = Instant::now();
+            let elapsed_us = (now - last_tick).as_micros() as f32;
+            last_tick = now;
+
+            let az_diff = target_az - current_az;
+            let el_diff = target_el - current_el;
+            let az_moving = az_diff.abs() > POS_EPSILON;
+            let el_moving = el_diff.abs() > POS_EPSILON;
+
+            if az_moving {
+                az_frac += elapsed_us * STEPS_PER_US;
+                let steps = az_frac as u32;
+                az_frac -= steps as f32;
+                let advance = steps as f32 * AZ_DEG_PER_STEP;
+                if az_diff > 0.0 {
+                    az_dir.set_high();
+                    current_az = (current_az + advance).min(target_az);
+                } else {
+                    az_dir.set_low();
+                    current_az = (current_az - advance).max(target_az);
+                }
+                az_pwm.ch1().enable();
             } else {
-                el_dir.set_low();
-                current_el = (current_el - advance).max(target_el);
+                current_az = target_az;
+                az_frac = 0.0;
+                az_pwm.ch1().disable();
             }
-            el_pwm.ch1().enable();
-        } else {
-            current_el = target_el;
-            el_frac = 0.0;
-            el_pwm.ch1().disable();
-        }
 
-        // Endstop safety (hardware)
-        // if az_home.is_low() && az_diff < 0.0 {
-        //     current_az = 0.0;
-        //     target_az = 0.0;
-        //     az_pwm.ch1().disable();
-        // }
-        if el_home.is_low() && el_diff < 0.0 {
-            current_el = 0.0;
-            target_el = 0.0;
-            el_pwm.ch1().disable();
-        }
+            if el_moving {
+                el_frac += elapsed_us * STEPS_PER_US;
+                let steps = el_frac as u32;
+                el_frac -= steps as f32;
+                let advance = steps as f32 * EL_DEG_PER_STEP;
+                if el_diff > 0.0 {
+                    el_dir.set_high();
+                    current_el = (current_el + advance).min(target_el);
+                } else {
+                    el_dir.set_low();
+                    current_el = (current_el - advance).max(target_el);
+                }
+                el_pwm.ch1().enable();
+            } else {
+                current_el = target_el;
+                el_frac = 0.0;
+                el_pwm.ch1().disable();
+            }
 
-        // Software position limits.
-        // AZ lower limit removed — gpredict tracks satellites through north (wraps below 0°).
-        // EL lower limit: hardware endstop is the physical safety, clamp prevents negative display.
-        // Upper limits: no hardware endstop, so also kill PWM and reset target so
-        //   el_moving / az_moving drops to false and the motor actually stops.
-        if current_el <=   0.0 { current_el =   0.0; }
-        if current_az >= 360.0 {
-            current_az = 360.0;
-            target_az  = 360.0;
-            az_pwm.ch1().disable();
-        }
-        if current_el >= 180.0 {
-            current_el = 180.0;
-            target_el  = 180.0;
-            el_pwm.ch1().disable();
-        }
+            // Endstop safety (hardware)
+            // if az_home.is_low() && az_diff < 0.0 {
+            //     current_az = 0.0;
+            //     target_az = 0.0;
+            //     az_pwm.ch1().disable();
+            // }
+            if el_home.is_low() && el_diff < 0.0 {
+                current_el = 0.0;
+                target_el = 0.0;
+                el_pwm.ch1().disable();
+            }
 
-        let moving = az_moving || el_moving;
-        if moving {
-            motor_en.set_low();
-        } else {
-            motor_en.set_high();
-        }
+            // Software position limits.
+            // AZ lower limit removed — gpredict tracks satellites through north (wraps below 0°).
+            // EL lower limit: hardware endstop is the physical safety, clamp prevents negative display.
+            // Upper limits: no hardware endstop, so also kill PWM and reset target so
+            //   el_moving / az_moving drops to false and the motor actually stops.
+            if current_el <= 0.0 {
+                current_el = 0.0;
+            }
+            if current_az >= 360.0 {
+                current_az = 360.0;
+                target_az = 360.0;
+                az_pwm.ch1().disable();
+            }
+            if current_el >= 180.0 {
+                current_el = 180.0;
+                target_el = 180.0;
+                el_pwm.ch1().disable();
+            }
 
-        // Clamp targets in published state so display never shows jog sentinels.
-        state_tx.send(RotatorState {
-            target_az: target_az.clamp(0.0, 360.0),
-            target_el: target_el.clamp(0.0, 180.0),
-            current_az,
-            current_el,
-            moving,
-            link_up: false,
-            phase: Phase::Running,
-        });
+            let moving = az_moving || el_moving;
+            if moving {
+                motor_en.set_low();
+            } else {
+                motor_en.set_high();
+            }
+
+            // Clamp targets in published state so display never shows jog sentinels.
+            state_tx.send(RotatorState {
+                target_az: target_az.clamp(0.0, 360.0),
+                target_el: target_el.clamp(0.0, 180.0),
+                current_az,
+                current_el,
+                moving,
+                link_up: false,
+                phase: Phase::Running,
+            });
         } // end 'running loop
     } // end outer homing loop
 }

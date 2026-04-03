@@ -88,6 +88,12 @@ ROTATOR_HOST=192.168.1.42 python3 -m pytest tests/test_live.py -v --timeout=60 -
 
 # Both together
 ROTATOR_HOST=192.168.1.42 ROTATOR_PORT=/dev/ttyUSB0 python3 -m pytest tests/ -v --timeout=60 -m "live or slow"
+
+# All 87 tests (stub + live + slow) -- overrides the default -m "not live" in pytest.ini
+ROTATOR_HOST=192.168.1.42 ROTATOR_PORT=/dev/ttyUSB0 python3 -m pytest tests/ -v --timeout=120 --override-ini="addopts="
+
+# List all tests without running them
+python3 -m pytest tests/ --collect-only -q --override-ini="addopts="
 ```
 
 Live tests cover DHCP/TCP connectivity, motor convergence to target, stop

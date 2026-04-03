@@ -12,6 +12,7 @@ All tests in this file are marked ``live`` and are excluded from CI via
 
 import os
 import socket
+import subprocess
 import time
 
 import pytest
@@ -49,6 +50,17 @@ def recv(s: socket.socket, n: int = 4096) -> str:
 
 
 # ── connectivity ──────────────────────────────────────────────────────────────
+
+@pytest.mark.live
+def test_icmp_ping():
+    """Device responds to ICMP echo (ping)."""
+    result = subprocess.run(
+        ["ping", "-c", "1", "-W", "2", _host()],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    assert result.returncode == 0, f"ping {_host()} failed"
+
 
 @pytest.mark.live
 def test_dhcp_and_tcp_connect():
@@ -182,6 +194,10 @@ def test_position_clamped_to_limits():
     az, el = float(lines[0]), float(lines[1])
     assert az <= 95.0 + 2.0, f"AZ exceeded limit: {az}"
     assert el <= 35.0 + 2.0, f"EL exceeded limit: {el}"
+    # Restore default limits so subsequent tests are not affected.
+    with _connect() as s:
+        send(s, "L 0.0 360.0 0.0 180.0")
+        recv(s)
 
 
 # ── multi-client ──────────────────────────────────────────────────────────────

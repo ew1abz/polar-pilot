@@ -1,5 +1,19 @@
 # TODO
 
+are we ready to remove embassy patch from the repo?
+create a readme file
+add github badges to readme file
+add logo to readme file
+create a github repo card
+add release to github actions
+merge to master release a first version
+Replace manufacturer Custom to github url
+Add screen switch - polar screen, big font - az and el only, info - ip, version, name, github page
+Add a beautiful Rust tui companion application to control the rotator
+Add a web page written in Rust/wasm as a companion app
+Create a few screencasts to promote the app
+Create a pitch to show why this project better then others
+
 ## Implement 1.5 Rotation
 
 adding overtravel (often called 540° rotation) is a very common and highly effective upgrade for satellite rotators. Allowing 1.5 rotations is exactly how high-end commercial and amateur rotators handle the "dead zone" problem.

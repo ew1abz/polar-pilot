@@ -1,8 +1,8 @@
+use core::cell::Cell;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::blocking_mutex::Mutex;
 use embassy_sync::channel::Channel;
 use embassy_sync::watch::Watch;
-use core::cell::Cell;
 
 #[derive(Clone, Copy, defmt::Format, PartialEq)]
 pub enum Phase {
@@ -39,10 +39,15 @@ impl Default for RotatorState {
 
 #[derive(Clone, Copy, defmt::Format)]
 pub enum RotatorCmd {
-    GoTo { az: f32, el: f32 },
+    GoTo {
+        az: f32,
+        el: f32,
+    },
     Stop,
     /// Re-run the full endstop homing sequence.
     Home,
+    /// Park at 0°/0°, bypassing soft limits.
+    Park,
 }
 
 /// Operator-configurable soft travel limits.  Defaults span the full range.
@@ -57,7 +62,12 @@ pub struct SoftLimits {
 
 impl SoftLimits {
     pub const fn default() -> Self {
-        Self { az_min: 0.0, az_max: 360.0, el_min: 0.0, el_max: 180.0 }
+        Self {
+            az_min: 0.0,
+            az_max: 360.0,
+            el_min: 0.0,
+            el_max: 180.0,
+        }
     }
 }
 

@@ -61,7 +61,9 @@ async fn main(spawner: Spawner) -> ! {
             divr: Some(PllRDiv::DIV2),
         });
         config.rcc.sys = Sysclk::PLL1_R;
-        config.rcc.hsi48 = Some(Hsi48Config { sync_from_usb: false });
+        config.rcc.hsi48 = Some(Hsi48Config {
+            sync_from_usb: false,
+        });
     }
     let p = embassy_stm32::init(config);
 
@@ -86,9 +88,7 @@ async fn main(spawner: Spawner) -> ! {
     let mut spi_cfg = spi::Config::default();
     spi_cfg.frequency = Hertz(1_000_000);
     let spi = Spi::new(
-        p.SPI1, p.PA5, p.PA7, p.PA6,
-        p.DMA1_CH3, p.DMA1_CH2,
-        Irqs, spi_cfg,
+        p.SPI1, p.PA5, p.PA7, p.PA6, p.DMA1_CH3, p.DMA1_CH2, Irqs, spi_cfg,
     );
     let cs = Output::new(p.PA4, Level::High, Speed::VeryHigh);
     let spi_dev = ExclusiveDevice::new(spi, cs, embassy_time::Delay).unwrap();
@@ -100,7 +100,9 @@ async fn main(spawner: Spawner) -> ! {
     let w5500_state = W5500_STATE.init(embassy_net_wiznet::State::<2, 2>::new());
 
     let (device, w5500_runner) =
-        embassy_net_wiznet::new(mac, w5500_state, spi_dev, w5500_int, w5500_rst).await.unwrap();
+        embassy_net_wiznet::new(mac, w5500_state, spi_dev, w5500_int, w5500_rst)
+            .await
+            .unwrap();
 
     let net_config = embassy_net::Config::dhcpv4(Default::default());
     let mut rng = embassy_stm32::rng::Rng::new(p.RNG, Irqs);
@@ -128,17 +130,29 @@ async fn main(spawner: Spawner) -> ! {
 
     let el_step = PwmPin::new(p.PA0, OutputType::PushPull);
     let el_pwm = SimplePwm::new(
-        p.TIM2, Some(el_step), None, None, None,
-        Hertz(STEP_HZ), Default::default(),
+        p.TIM2,
+        Some(el_step),
+        None,
+        None,
+        None,
+        Hertz(STEP_HZ),
+        Default::default(),
     );
 
     let az_step = PwmPin::new(p.PA8, OutputType::PushPull);
     let az_pwm = SimplePwm::new(
-        p.TIM1, Some(az_step), None, None, None,
-        Hertz(STEP_HZ), Default::default(),
+        p.TIM1,
+        Some(az_step),
+        None,
+        None,
+        None,
+        Hertz(STEP_HZ),
+        Default::default(),
     );
 
-    spawner.spawn(unwrap!(motor_task(az_pwm, el_pwm, az_dir, el_dir, motor_en, az_home, el_home)));
+    spawner.spawn(unwrap!(motor_task(
+        az_pwm, el_pwm, az_dir, el_dir, motor_en, az_home, el_home
+    )));
 
     // ── 5-way navigation buttons ────────────────────────────────
     let btn_up = Input::new(p.PB1, Pull::Up);
@@ -146,18 +160,21 @@ async fn main(spawner: Spawner) -> ! {
     let btn_left = Input::new(p.PA11, Pull::Up);
     let btn_right = Input::new(p.PA12, Pull::Up);
     let btn_center = Input::new(p.PC15, Pull::Up);
-    spawner.spawn(unwrap!(key_task(btn_up, btn_down, btn_left, btn_right, btn_center)));
+    spawner.spawn(unwrap!(key_task(
+        btn_up, btn_down, btn_left, btn_right, btn_center
+    )));
 
-    // ── Rotctld TCP server ──────────────────────────────────────
+    // ── Rotctld TCP server (2 concurrent clients) ───────────────
+    spawner.spawn(unwrap!(rotctld_task(stack)));
     spawner.spawn(unwrap!(rotctld_task(stack)));
 
     // ── EasyComm II serial (USART2) ─────────────────────────────
     let mut usart_cfg = usart::Config::default();
     usart_cfg.baudrate = 9600;
     let uart = usart::Uart::new(
-        p.USART2, p.PA15, p.PA2,
-        p.DMA1_CH7, p.DMA1_CH6, Irqs, usart_cfg,
-    ).unwrap();
+        p.USART2, p.PA15, p.PA2, p.DMA1_CH7, p.DMA1_CH6, Irqs, usart_cfg,
+    )
+    .unwrap();
     let (usart_tx, usart_rx) = uart.split();
     spawner.spawn(unwrap!(easycom_task(usart_rx, usart_tx)));
 
