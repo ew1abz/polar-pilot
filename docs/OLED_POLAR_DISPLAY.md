@@ -110,12 +110,15 @@ IP is queried directly from the Stack via `stack.config_v4()` — not via
 ### IP Address Display
 
 When DHCP has completed, the IP is split across two rows:
-```
+
+```text
 192.168.
 1.200
 ```
+
 While waiting for DHCP (or no IP):
-```
+
+```text
 ---.---.
 ---.---
 ```

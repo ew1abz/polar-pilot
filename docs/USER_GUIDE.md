@@ -7,7 +7,8 @@
 3. Both axes drive toward their home switches. The display shows **Homing** until both axes reach zero.
 4. Once homing completes, the display shows **No IP** (waiting for DHCP) or **Idle** (IP assigned).
 5. The IP address appears on the bottom two lines of the display, e.g.:
-   ```
+
+   ```text
    192.168.
    1.200
    ```
@@ -66,11 +67,14 @@ nc 192.168.1.200 4533
 ```
 
 **Get current limits:**
-```
+
+```text
 l
 ```
+
 Response:
-```
+
+```text
 0.0        ← az_min
 360.0      ← az_max
 0.0        ← el_min
@@ -79,7 +83,8 @@ RPRT 0
 ```
 
 **Set limits:**
-```
+
+```text
 L <az_min> <az_max> <el_min> <el_max>
 ```
 
@@ -104,22 +109,26 @@ Connect at **9600 baud** to the USB serial port (usually `/dev/ttyACM0` on
 Linux, `COMx` on Windows).
 
 **Get current limits:**
-```
+
+```text
 LM
 ```
+
 Response:
-```
+
+```text
 LM 0.0 360.0 0.0 180.0
 ```
 
 **Set limits:**
-```
+
+```text
 LM <az_min> <az_max> <el_min> <el_max>
 ```
 
 Examples:
 
-```
+```text
 LM 90 270 0 180
 LM 0 360 5 180
 LM 0 360 0 180
@@ -135,7 +144,7 @@ No response is sent on success. Invalid arguments are silently ignored
 If a homing fault occurs (endstop stuck or travel limit exceeded), the display
 shows:
 
-```
+```text
 FAULT
 AZ endstop stuck
 Power cycle

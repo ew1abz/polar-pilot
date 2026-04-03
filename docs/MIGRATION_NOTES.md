@@ -37,6 +37,7 @@ antenna loads this causes missed steps and mechanical shock.
 100°/sec² acceleration, 25°/sec cruise speed, smooth ramp-down.
 
 **Options:**
+
 - a) Implement ramp-up/ramp-down in `motor_task` by ramping PWM frequency
      (start at low freq, increase to STEP_HZ over N steps, reverse at end)
 - b) Port `stepper-motion` into the Embassy async model
@@ -52,6 +53,7 @@ There is no `RotatorCmd::Home` variant and no way to trigger re-homing without
 a power cycle.
 
 **Changes needed:**
+
 - Add `RotatorCmd::Home` variant to `types.rs`
 - Implement long-press detection in `key_task` (hold timer, >500 ms threshold)
 - Handle `RotatorCmd::Home` in `motor_task`: drop current move, restart homing FSM

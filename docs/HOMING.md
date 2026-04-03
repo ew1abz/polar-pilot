@@ -33,7 +33,7 @@ Published in every `RotatorState` send so all tasks can react.
 
 Axes are homed **serially**: AZ first, then EL. Both axes use identical logic.
 
-```
+```text
 Phase::Homing published ──────────────────────────────────────────────────►
                                                             Phase::Running
   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐

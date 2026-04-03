@@ -125,10 +125,12 @@ Up to **2 concurrent TCP clients** are supported simultaneously on port 4533.
 | `\dump_state`                  | —                  | Hamlib compatibility     | State block with current limits |
 
 When `Phase::Fault`, `p`, `P`, and `S` all respond with:
+
 ```text
 FAULT: <message>
 RPRT -9
 ```
+
 `RPRT -9` is Hamlib's "command rejected" code. Unrecognized commands return `RPRT -1\n`.
 
 ### `\dump_state` Response

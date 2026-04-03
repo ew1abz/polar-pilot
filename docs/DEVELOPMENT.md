@@ -101,7 +101,7 @@ response, reset/park, soft limit enforcement, and two concurrent clients.
 
 ### Test File Layout
 
-```
+```text
 tests/
   stub_server.py      in-process TCP stub + RotatorState
   conftest.py         conn_stub (per-test clean state) and conn_live fixtures

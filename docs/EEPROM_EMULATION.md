@@ -34,7 +34,7 @@ range of flash pages so no single page absorbs all the erase cycles.
 Allocate the last 4 pages (8 KB) of flash for storage, keeping them out of
 the linker's program region:
 
-```
+```text
 0x0800_0000  ┌──────────────────────┐
              │  Firmware (≤248 KB)  │
 0x0803_E000  ├──────────────────────┤  ← storage start
@@ -47,7 +47,7 @@ the linker's program region:
 
 Reserve those pages in `memory.x` so the linker never places code there:
 
-```
+```text
 /* memory.x */
 MEMORY
 {
