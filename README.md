@@ -9,10 +9,16 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/ew1abz/rust-l432-w5500/actions"><img src="https://github.com/ew1abz/rust-l432-w5500/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/ew1abz/polar-pilot/actions"><img src="https://github.com/ew1abz/polar-pilot/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/badge/target-thumbv7em--none--eabihf-blue" alt="target">
   <img src="https://img.shields.io/badge/embassy-async-orange" alt="embassy">
   <img src="https://img.shields.io/badge/license-GPL--3.0-green" alt="license">
+</p>
+
+<p align="center">
+  <a href="https://github.com/ew1abz/polar-pilot">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ew1abz&repo=polar-pilot" alt="Repo card">
+  </a>
 </p>
 
 ---
