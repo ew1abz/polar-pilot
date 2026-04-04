@@ -53,15 +53,8 @@ async fn main(spawner: Spawner) -> ! {
 
     // ── EL STEP — TIM2_CH1 on PA0 (1000 Hz) ──────────────────────
     let el_step = PwmPin::new(p.PA0, OutputType::PushPull);
-    let mut el_pwm = SimplePwm::new(
-        p.TIM2,
-        Some(el_step),
-        None,
-        None,
-        None,
-        Hertz(1_000),
-        Default::default(),
-    );
+    let mut el_pwm =
+        SimplePwm::new(p.TIM2, Some(el_step), None, None, None, Hertz(1_000), Default::default());
     {
         let mut ch = el_pwm.ch1();
         ch.set_duty_cycle(ch.max_duty_cycle() / 2);
@@ -71,15 +64,8 @@ async fn main(spawner: Spawner) -> ! {
 
     // ── AZ STEP — TIM1_CH1 on PA8 (500 Hz) ───────────────────────
     let az_step = PwmPin::new(p.PA8, OutputType::PushPull);
-    let mut az_pwm = SimplePwm::new(
-        p.TIM1,
-        Some(az_step),
-        None,
-        None,
-        None,
-        Hertz(500),
-        Default::default(),
-    );
+    let mut az_pwm =
+        SimplePwm::new(p.TIM1, Some(az_step), None, None, None, Hertz(500), Default::default());
     {
         let mut ch = az_pwm.ch1();
         ch.set_duty_cycle(ch.max_duty_cycle() / 2);

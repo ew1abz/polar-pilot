@@ -55,9 +55,7 @@ async fn main(_spawner: Spawner) -> ! {
     // ── SPI1 init ─────────────────────────────────────────────────
     let mut spi_cfg = spi::Config::default();
     spi_cfg.frequency = Hertz(1_000_000);
-    let mut spi = Spi::new(
-        p.SPI1, p.PA5, p.PA7, p.PA6, p.DMA1_CH3, p.DMA1_CH2, Irqs, spi_cfg,
-    );
+    let mut spi = Spi::new(p.SPI1, p.PA5, p.PA7, p.PA6, p.DMA1_CH3, p.DMA1_CH2, Irqs, spi_cfg);
     let mut cs = Output::new(p.PA4, Level::High, Speed::VeryHigh);
 
     // ── Read VERSIONR (0x0039) ────────────────────────────────────
@@ -74,18 +72,12 @@ async fn main(_spawner: Spawner) -> ! {
 
         attempts += 1;
         if attempts % 100 == 0 {
-            warn!(
-                "Still waiting for W5500... (attempt {}, got {:#x})",
-                attempts, ver[0]
-            );
+            warn!("Still waiting for W5500... (attempt {}, got {:#x})", attempts, ver[0]);
         }
         Timer::after_millis(2).await;
     }
 
-    info!(
-        "W5500 detected (VERSIONR = {:#x}) after {} attempts",
-        ver[0], attempts
-    );
+    info!("W5500 detected (VERSIONR = {:#x}) after {} attempts", ver[0], attempts);
 
     // ── Success: blink LED ────────────────────────────────────────
     let mut ticker = Ticker::every(Duration::from_millis(200));

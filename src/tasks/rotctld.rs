@@ -60,11 +60,7 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                     if let Phase::Fault(msg) = state.phase {
                         let _ = core::write!(resp, "FAULT: {}\nRPRT -9\n", msg);
                     } else {
-                        let args = if line.starts_with("P ") {
-                            &line[2..]
-                        } else {
-                            &line[9..]
-                        };
+                        let args = if line.starts_with("P ") { &line[2..] } else { &line[9..] };
                         let mut parts = args.splitn(2, ' ');
                         let az = parts.next().and_then(parse_f32);
                         let el = parts.next().and_then(parse_f32);
@@ -97,11 +93,7 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                         lim.el_max
                     );
                 } else if line.starts_with("L ") || line.starts_with("\\set_limits ") {
-                    let args = if line.starts_with("L ") {
-                        &line[2..]
-                    } else {
-                        &line[12..]
-                    };
+                    let args = if line.starts_with("L ") { &line[2..] } else { &line[12..] };
                     let mut parts = args.splitn(4, ' ');
                     let az_min = parts.next().and_then(parse_f32);
                     let az_max = parts.next().and_then(parse_f32);
@@ -110,12 +102,7 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                     match (az_min, az_max, el_min, el_max) {
                         (Some(az_min), Some(az_max), Some(el_min), Some(el_max)) => {
                             LIMITS.lock(|c| {
-                                c.set(crate::types::SoftLimits {
-                                    az_min,
-                                    az_max,
-                                    el_min,
-                                    el_max,
-                                })
+                                c.set(crate::types::SoftLimits { az_min, az_max, el_min, el_max })
                             });
                             let _ = core::write!(resp, "RPRT 0\n");
                         }
@@ -124,11 +111,7 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                         }
                     }
                 } else if line.starts_with("M ") || line.starts_with("\\move ") {
-                    let args = if line.starts_with("M ") {
-                        &line[2..]
-                    } else {
-                        &line[6..]
-                    };
+                    let args = if line.starts_with("M ") { &line[2..] } else { &line[6..] };
                     let mut parts = args.splitn(2, ' ');
                     let dir = parts.next().and_then(|s| s.parse::<u8>().ok());
                     // speed arg is accepted but ignored — motor runs at fixed rate
@@ -139,35 +122,23 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                     } else {
                         match dir {
                             Some(2) => {
-                                CMD.send(RotatorCmd::GoTo {
-                                    az: state.current_az,
-                                    el: 9999.0,
-                                })
-                                .await;
+                                CMD.send(RotatorCmd::GoTo { az: state.current_az, el: 9999.0 })
+                                    .await;
                                 let _ = core::write!(resp, "RPRT 0\n");
                             }
                             Some(4) => {
-                                CMD.send(RotatorCmd::GoTo {
-                                    az: state.current_az,
-                                    el: -9999.0,
-                                })
-                                .await;
+                                CMD.send(RotatorCmd::GoTo { az: state.current_az, el: -9999.0 })
+                                    .await;
                                 let _ = core::write!(resp, "RPRT 0\n");
                             }
                             Some(8) => {
-                                CMD.send(RotatorCmd::GoTo {
-                                    az: -9999.0,
-                                    el: state.current_el,
-                                })
-                                .await;
+                                CMD.send(RotatorCmd::GoTo { az: -9999.0, el: state.current_el })
+                                    .await;
                                 let _ = core::write!(resp, "RPRT 0\n");
                             }
                             Some(16) => {
-                                CMD.send(RotatorCmd::GoTo {
-                                    az: 9999.0,
-                                    el: state.current_el,
-                                })
-                                .await;
+                                CMD.send(RotatorCmd::GoTo { az: 9999.0, el: state.current_el })
+                                    .await;
                                 let _ = core::write!(resp, "RPRT 0\n");
                             }
                             _ => {

@@ -47,27 +47,20 @@ pub async fn display_task(
         display.clear_buffer();
         let raw: ImageRaw<BinaryColor> = ImageRaw::new(include_bytes!("../rust.raw"), 64);
         let _ = Image::new(&raw, Point::new(0, 0)).draw(&mut display);
-        let splash_style = MonoTextStyleBuilder::new()
-            .font(&FONT_6X10)
-            .text_color(BinaryColor::On)
-            .build();
+        let splash_style =
+            MonoTextStyleBuilder::new().font(&FONT_6X10).text_color(BinaryColor::On).build();
         let _ = Text::new("Polar", Point::new(74, 24), splash_style).draw(&mut display);
         let _ = Text::new("Pilot", Point::new(74, 38), splash_style).draw(&mut display);
-        let _ = Text::new(
-            concat!("v", env!("CARGO_PKG_VERSION")),
-            Point::new(70, 56),
-            splash_style,
-        )
-        .draw(&mut display);
+        let _ =
+            Text::new(concat!("v", env!("CARGO_PKG_VERSION")), Point::new(70, 56), splash_style)
+                .draw(&mut display);
         display.flush().ok();
         Timer::after_secs(2).await;
     }
 
     let thin_stroke = PrimitiveStyle::with_stroke(BinaryColor::On, 1);
-    let text_style = MonoTextStyleBuilder::new()
-        .font(&FONT_6X10)
-        .text_color(BinaryColor::On)
-        .build();
+    let text_style =
+        MonoTextStyleBuilder::new().font(&FONT_6X10).text_color(BinaryColor::On).build();
 
     const CX: i32 = 39;
     const CY: i32 = 32;

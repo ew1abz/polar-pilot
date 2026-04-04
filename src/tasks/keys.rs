@@ -20,10 +20,7 @@ pub async fn key_task(
 
     impl BtnState {
         const fn new() -> Self {
-            Self {
-                raw_count: 0,
-                pressed: false,
-            }
+            Self { raw_count: 0, pressed: false }
         }
 
         // Returns true on a press or release edge.

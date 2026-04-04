@@ -72,10 +72,7 @@ async fn main(_spawner: Spawner) -> ! {
         }
     }
 
-    let style = MonoTextStyleBuilder::new()
-        .font(&FONT_6X10)
-        .text_color(BinaryColor::On)
-        .build();
+    let style = MonoTextStyleBuilder::new().font(&FONT_6X10).text_color(BinaryColor::On).build();
 
     let mut counter: u32 = 0;
     let mut buf = heapless::String::<32>::new();
@@ -93,12 +90,8 @@ async fn main(_spawner: Spawner) -> ! {
         let _ = Text::new(&buf, Point::new(16, 30), style).draw(&mut display);
 
         // Spinning dot — cycles through 4 positions
-        let positions = [
-            Point::new(100, 45),
-            Point::new(110, 45),
-            Point::new(110, 55),
-            Point::new(100, 55),
-        ];
+        let positions =
+            [Point::new(100, 45), Point::new(110, 45), Point::new(110, 55), Point::new(100, 55)];
         let pos = positions[(counter as usize) % 4];
         let _ = Circle::new(pos, 6)
             .into_styled(PrimitiveStyle::with_fill(BinaryColor::On))

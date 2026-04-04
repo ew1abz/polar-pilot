@@ -62,12 +62,7 @@ pub struct SoftLimits {
 
 impl SoftLimits {
     pub const fn default() -> Self {
-        Self {
-            az_min: 0.0,
-            az_max: 360.0,
-            el_min: 0.0,
-            el_max: 180.0,
-        }
+        Self { az_min: 0.0, az_max: 360.0, el_min: 0.0, el_max: 180.0 }
     }
 }
 
