@@ -1,9 +1,6 @@
 # TODO
 
-are we ready to remove embassy patch from the repo?
-create a readme file
-add github badges to readme file
-add logo to readme file
+
 create a github repo card
 add release to github actions
 merge to master release a first version
@@ -13,6 +10,26 @@ Add a beautiful Rust tui companion application to control the rotator
 Add a web page written in Rust/wasm as a companion app
 Create a few screencasts to promote the app
 Create a pitch to show why this project better then others
+Use RPico for the same project.
+Add real peacture
+Create Amazon BOM
+    Box Serpac 151 BK
+    Base PCB - breadboard 7x9 cm
+    Motor drivers
+    W5500 module
+    Nucleo board
+    5 nav joystic
+    SSD1306 module
+    Power connector
+    PoE adaptors
+    Standoffs
+
+Schematic
+Test Github actions
+
+
+Add cargo feature for single-axis (AZ-only) build
+
 
 ## Implement 1.5 Rotation
 

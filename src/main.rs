@@ -77,7 +77,7 @@ async fn main(spawner: Spawner) -> ! {
     // ── OLED display (I2C1) — spawned after stack so it can read IP ──
     let i2c = I2c::new_blocking(p.I2C1, p.PB6, p.PB7, Default::default());
 
-    // ── W5500 Ethernet ──────────────────────────────────────────
+    // ── W5500 Ethernet (optional) ───────────────────────────────
     let mut w5500_rst = Output::new(p.PA1, Level::Low, Speed::Low);
     Timer::after_millis(1).await;
     w5500_rst.set_high();
@@ -95,24 +95,36 @@ async fn main(spawner: Spawner) -> ! {
     static W5500_STATE: StaticCell<embassy_net_wiznet::State<2, 2>> = StaticCell::new();
     let w5500_state = W5500_STATE.init(embassy_net_wiznet::State::<2, 2>::new());
 
-    let (device, w5500_runner) =
-        embassy_net_wiznet::new(mac, w5500_state, spi_dev, w5500_int, w5500_rst).await.unwrap();
+    let stack = match embassy_net_wiznet::new(mac, w5500_state, spi_dev, w5500_int, w5500_rst).await
+    {
+        Ok((device, w5500_runner)) => {
+            let net_config = embassy_net::Config::dhcpv4(Default::default());
+            let mut rng = embassy_stm32::rng::Rng::new(p.RNG, Irqs);
+            let seed = rng.next_u32() as u64 | ((rng.next_u32() as u64) << 32);
 
-    let net_config = embassy_net::Config::dhcpv4(Default::default());
-    let mut rng = embassy_stm32::rng::Rng::new(p.RNG, Irqs);
-    let seed = rng.next_u32() as u64 | ((rng.next_u32() as u64) << 32);
+            static NET_RESOURCES: StaticCell<embassy_net::StackResources<3>> = StaticCell::new();
+            let (stack, net_runner) = embassy_net::new(
+                device,
+                net_config,
+                NET_RESOURCES.init(embassy_net::StackResources::new()),
+                seed,
+            );
 
-    static NET_RESOURCES: StaticCell<embassy_net::StackResources<3>> = StaticCell::new();
-    let (stack, net_runner) = embassy_net::new(
-        device,
-        net_config,
-        NET_RESOURCES.init(embassy_net::StackResources::new()),
-        seed,
-    );
+            spawner.spawn(unwrap!(ethernet_task(w5500_runner)));
+            spawner.spawn(unwrap!(net_task(net_runner)));
+            spawner.spawn(unwrap!(dhcp_watchdog_task(stack)));
+            spawner.spawn(unwrap!(rotctld_task(stack)));
+            spawner.spawn(unwrap!(rotctld_task(stack)));
 
-    spawner.spawn(unwrap!(ethernet_task(w5500_runner)));
-    spawner.spawn(unwrap!(net_task(net_runner)));
-    spawner.spawn(unwrap!(dhcp_watchdog_task(stack)));
+            info!("W5500 initialized");
+            Some(stack)
+        }
+        Err(_) => {
+            warn!("W5500 not found — running without Ethernet");
+            None
+        }
+    };
+
     spawner.spawn(unwrap!(display_task(i2c, stack)));
 
     // ── Stepper motors ──────────────────────────────────────────
@@ -139,10 +151,6 @@ async fn main(spawner: Spawner) -> ! {
     let btn_right = Input::new(p.PA12, Pull::Up);
     let btn_center = Input::new(p.PC15, Pull::Up);
     spawner.spawn(unwrap!(key_task(btn_up, btn_down, btn_left, btn_right, btn_center)));
-
-    // ── Rotctld TCP server (2 concurrent clients) ───────────────
-    spawner.spawn(unwrap!(rotctld_task(stack)));
-    spawner.spawn(unwrap!(rotctld_task(stack)));
 
     // ── EasyComm II serial (USART2) ─────────────────────────────
     let mut usart_cfg = usart::Config::default();

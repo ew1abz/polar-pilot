@@ -22,7 +22,7 @@ use crate::types::{Phase, STATE};
 #[embassy_executor::task]
 pub async fn display_task(
     i2c: I2c<'static, embassy_stm32::mode::Blocking, embassy_stm32::i2c::Master>,
-    stack: Stack<'static>,
+    stack: Option<Stack<'static>>,
 ) -> ! {
     let interface = I2CDisplayInterface::new(i2c);
     let mut display = Ssd1306::new(interface, DisplaySize128x64, DisplayRotation::Rotate0)
@@ -161,11 +161,12 @@ pub async fn display_task(
         let _ = Text::new(&buf, Point::new(TX, 22), text_style).draw(&mut display);
 
         // Status line (above IP)
-        let ip_cfg = stack.config_v4();
+        let ip_cfg = stack.as_ref().and_then(|s| s.config_v4());
         let status = match state.phase {
             Phase::Homing => "Homing",
             Phase::Running if state.moving => "Moving",
             Phase::Running if ip_cfg.is_some() => "Idle",
+            Phase::Running if stack.is_none() => "No ETH",
             Phase::Running => "No IP",
             Phase::Fault(_) => core::unreachable!(), // handled above
         };
@@ -174,7 +175,7 @@ pub async fn display_task(
         // IP address — split across two rows (8 chars each fits the right panel)
         // Row 1: "A.B."  Row 2: "C.D"
         buf.clear();
-        if let Some(cfg) = ip_cfg {
+        if let Some(ref cfg) = ip_cfg {
             let o = cfg.address.address().octets();
             let _ = core::write!(buf, "{}.{}.", o[0], o[1]);
         } else {
@@ -183,7 +184,7 @@ pub async fn display_task(
         let _ = Text::new(&buf, Point::new(TX, 52), text_style).draw(&mut display);
 
         buf.clear();
-        if let Some(cfg) = stack.config_v4() {
+        if let Some(cfg) = ip_cfg {
             let o = cfg.address.address().octets();
             let _ = core::write!(buf, "{}.{}", o[2], o[3]);
         } else {
