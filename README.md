@@ -17,7 +17,7 @@
 
 <p align="center">
   <a href="https://github.com/ew1abz/polar-pilot">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ew1abz&repo=polar-pilot" alt="Repo card">
+    <img src="https://gh-card.dev/repos/ew1abz/polar-pilot.svg" alt="Repo card">
   </a>
 </p>
 
@@ -78,9 +78,9 @@ Four 0 Ω solder bridges must be removed before assembling:
 
 | Bridge | Why                                                                     |
 |--------|-------------------------------------------------------------------------|
-| SB1    | Frees PC14 from the 32 kHz oscillator -> AZ DIR output                 |
+| SB1    | Frees PC14 from the 32 kHz oscillator -> AZ DIR output                  |
 | SB2    | Frees PC15 from the 32 kHz oscillator -> Nav CENTER input               |
-| SB16   | Isolates PA5 from PB6 so SPI1 (W5500) and I2C1 (SSD1306) don't short  |
+| SB16   | Isolates PA5 from PB6 so SPI1 (W5500) and I2C1 (SSD1306) don't short    |
 | SB18   | Isolates PA6 from PB7 for the same reason                               |
 
 See [docs/SPEC.md](docs/SPEC.md) for the full pin table and a standalone-power
@@ -115,7 +115,7 @@ cargo run --release --bin button_test   # 5-way nav buttons
 ### Connecting gpredict
 
 1. Flash the firmware and connect the W5500 module to your network.
-2. Watch the RTT console for the DHCP-assigned IP address.
+2. Watch the LCD for the DHCP-assigned IP address.
 3. In gpredict → Edit → Preferences → Interfaces → Rotators, add a new
    rotator: **Host** = `<ip>`, **Port** = `4533`.
 4. Start tracking — gpredict will drive the rotator via rotctld protocol.
@@ -149,11 +149,10 @@ Full data-flow diagrams and per-task peripheral assignments are in
 - [ ] Screen modes: polar chart / big AZ+EL digits / info (IP, version, GitHub)
 - [ ] Rust TUI companion application
 - [ ] Rust/WASM web companion app
-- [ ] GitHub Actions release workflow
 
 ## License
 
-Copyright (C) 2025 ew1abz
+Copyright (C) 2026 ew1abz
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the **GNU General Public License v3.0** as published by the Free
