@@ -149,7 +149,7 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                 } else if line == "1" || line == "\\dump_caps" {
                     let lim = LIMITS.lock(|c| c.get());
                     let _ = core::write!(resp,
-                        "Caps dump for model: 2\nModel name:\tPolar Pilot\nMfg name:\tCustom\nBackend version:\t{}\nBackend status:\tAlpha\nRotator type:\tAz-El\nCan set position:\tY\nCan get position:\tY\nCan stop:\tY\nCan reset:\tY\nCan move:\tY\nMin Azimuth:\t{:.2}\nMax Azimuth:\t{:.2}\nMin Elevation:\t{:.2}\nMax Elevation:\t{:.2}\nRPRT 0\n",
+                        "Caps dump for model: 2\nModel name:\tPolar Pilot\nMfg name:\thttps://github.com/ew1abz/rust-l432-w5500\nBackend version:\t{}\nBackend status:\tAlpha\nRotator type:\tAz-El\nCan set position:\tY\nCan get position:\tY\nCan stop:\tY\nCan reset:\tY\nCan move:\tY\nMin Azimuth:\t{:.2}\nMax Azimuth:\t{:.2}\nMin Elevation:\t{:.2}\nMax Elevation:\t{:.2}\nRPRT 0\n",
                         env!("CARGO_PKG_VERSION"),
                         lim.az_min, lim.az_max, lim.el_min, lim.el_max);
                 } else if line.starts_with("R ")
@@ -183,7 +183,7 @@ pub async fn rotctld_task(stack: embassy_net::Stack<'static>) -> ! {
                     break 'conn;
                 } else if line == "_" || line == "\\get_info" {
                     let _ = core::write!(resp,
-                        "Model name:\tPolar Pilot\nModel ID:\t2\nMfg name:\tCustom\nSW version:\t{}\nStatus:\t\tAlpha\nMax AZ:\t\t450\nMax EL:\t\t180\nRPRT 0\n",
+                        "Model name:\tPolar Pilot\nModel ID:\t2\nMfg name:\thttps://github.com/ew1abz/rust-l432-w5500\nSW version:\t{}\nStatus:\t\tAlpha\nMax AZ:\t\t450\nMax EL:\t\t180\nRPRT 0\n",
                         env!("CARGO_PKG_VERSION"));
                 } else if line == "\\dump_state" {
                     let lim = LIMITS.lock(|c| c.get());
