@@ -151,12 +151,48 @@ Nine Embassy async tasks communicate through two shared primitives:
 Full data-flow diagrams and per-task peripheral assignments are in
 [docs/TASK_ARCHITECTURE.md](docs/TASK_ARCHITECTURE.md).
 
+## Quality
+
+**Memory-safe by construction.** Written in Rust — no buffer overflows, no
+use-after-free, no data races. `#![no_std]` / `#![no_main]` with zero heap
+allocation; every buffer is stack or statically allocated, so there is no
+allocator to corrupt and no fragmentation at runtime.
+
+**Tested at two layers.** A suite of 52 protocol tests runs against an
+in-process Python stub on every CI push — no hardware required. A separate
+live test suite covers DHCP/TCP connectivity, motor convergence, soft-limit
+enforcement, EasyComm II, GS-232, and two concurrent TCP clients against real
+hardware before every release.
+
+**Automated CI/CD.** GitHub Actions builds the firmware on every push.
+A dedicated release workflow fires on a version tag, produces `.bin` and
+`.hex` artifacts, and publishes them to the GitHub Releases page automatically.
+
+**Comprehensive documentation.**
+
+| Document | Contents |
+|----------|----------|
+| [docs/SPEC.md](docs/SPEC.md) | Full pin table, solder-bridge modifications, protocol reference |
+| [docs/TASK_ARCHITECTURE.md](docs/TASK_ARCHITECTURE.md) | Per-task data flow and peripheral assignments |
+| [docs/HOMING.md](docs/HOMING.md) | Homing algorithm, fault handling, edge cases |
+| [docs/MANUAL_CONTROL.md](docs/MANUAL_CONTROL.md) | 5-way joystick behaviour |
+| [docs/OLED_POLAR_DISPLAY.md](docs/OLED_POLAR_DISPLAY.md) | Polar chart rendering |
+| [docs/BOM.md](docs/BOM.md) | Bill of materials with datasheets and purchase links |
+| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Build, flash, test, and crate dependency notes |
+| [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md) | Step-by-step release process |
+| [kikad/polar-pilot.pdf](kikad/polar-pilot.pdf) | Full schematic (KiCad PDF export) |
+
 ## Roadmap
 
-- [ ] 540° / 1.5-rotation overtravel mode (eliminates the north-crossing dead zone)
+- [ ] [540° / 1.5-rotation overtravel mode](docs/OVERTRAVEL.md) (eliminates the north-crossing dead zone)
+- [ ] Single-axis (AZ-only) build via a Cargo feature flag
+- [ ] Auxiliary GPIO outputs for LNA, PA, and antenna switch control
 - [ ] Screen modes: polar chart / big AZ+EL digits / info (IP, version, GitHub)
 - [ ] Rust TUI companion application
 - [ ] Rust/WASM web companion app
+- [ ] Firmware update over the network (OTA via TCP)
+- [ ] RP2350 port using a board with integrated W5500
+- [ ] Custom PCB with integrated PoE
 
 ## License
 
