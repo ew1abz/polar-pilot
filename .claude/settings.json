@@ -1,4 +1,13 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"https://raw.githubusercontent.com/embassy-rs/embassy/refs/heads/main/embassy-net-wiznet/src/device.rs\")",
+      "Bash(probe-rs list:*)",
+      "Bash(probe-rs run:*)",
+      "Bash(python3 -m pytest tests/test_live.py -v -m live)",
+      "Bash(ROTATOR_HOST=10.76.45.252 python3 -m pytest tests/test_live.py -v -m live)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {

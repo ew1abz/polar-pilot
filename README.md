@@ -1,7 +1,7 @@
 # Polar Pilot
 
 <p align="center">
-  <img src="polar-pilot.png" alt="Polar Pilot logo" width="160"/>
+  <img src="docs/polar-pilot.png" alt="Polar Pilot logo" width="160"/>
 </p>
 
 <p align="center">
@@ -45,11 +45,14 @@ concurrent async tasks run on the [Embassy](https://embassy.dev/) executor.
 
 ## Features
 
-- **Dual protocol** — Hamlib rotctld on TCP :4533 and EasyComm II on USART2
+- **Dual interface** — Ethernet (TCP :4533) and serial (USART2) operate simultaneously
+- **Dual serial protocol** — EasyComm II and GS-232/GS-232B commands on the same USART2 port
+- **Dual TCP connection** — up to two concurrent rotctld clients on port 4533
 - **W5500 Ethernet** — ICMP (ping), DHCP, hardwired TCP/IP stack
 - **[SSD1306 polar display](docs/OLED_POLAR_DISPLAY.md)** — real-time azimuth/elevation polar chart at 4 Hz
 - **Stepper motor control** — hardware PWM via TIM1/TIM2, STEP/DIR/EN interface
 - **[Auto-homing](docs/HOMING.md)** — endstop-based homing on power-on
+- **Soft limits** — configurable AZ/EL travel limits via rotctld (`L`) and EasyComm (`LM`), persisted across commands
 - **[5-way joystick](docs/MANUAL_CONTROL.md)** — manual GoTo and Stop commands without a PC
 - **Heartbeat LED** — 1 Hz blink on PB3 to confirm the firmware is alive
 - **Embassy async** — nine cooperative tasks, no RTOS, no heap
@@ -85,6 +88,11 @@ Four 0 Ω solder bridges must be removed before assembling:
 
 See [docs/SPEC.md](docs/SPEC.md) for the full pin table and a standalone-power
 jumper note (needed when running without USB).
+
+### Schematic
+
+The KiCad schematic is in [kikad/polar-pilot.kicad_sch](kikad/polar-pilot.kicad_sch).
+A rendered PDF export is at [kikad/polar-pilot.pdf](kikad/polar-pilot.pdf).
 
 ## Getting Started
 
